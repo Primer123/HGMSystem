@@ -1,0 +1,19 @@
+(function(window, $, undefined){
+    var memberManageService = {
+        attachEvent: function attachEvent() {
+            /** Begin of createRecordBtn **/
+            $('.adminAdd').on("click", function(){
+                var $createModel = $('#AddMemberModal');
+                $createModel.modal({
+                    backdrop: 'static'
+                });
+            });
+        },
+        init: function init() {
+            this.attachEvent();
+        }
+    }
+
+    memberManageService.init();
+
+}(window || this, jQuery, undefined));

@@ -1,0 +1,18 @@
+package action;
+
+import javax.xml.ws.Action;
+
+public class RoomTypeManageAction extends BaseAction{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Action(value = "/roomtypesearch")//19
+	@Action(value ="/add")//83
+	@Action(value ="/update")//171
+	@Action(value ="/delete")
+	
+
+}

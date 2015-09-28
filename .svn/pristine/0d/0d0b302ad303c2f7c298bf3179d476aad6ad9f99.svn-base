@@ -1,0 +1,148 @@
+body{
+	margin:0 auto;
+	
+}
+#worklist {
+	position:absolute;
+	width:253px;
+	height:516px;
+	z-index:2;
+	left: -272px;
+	top: -27px;
+}
+#allttable {
+	position:absolute;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #a9c6c9;
+	width:740px;
+	height:519px;
+	z-index:3;
+	left: 35px;
+	top: 104px;
+	background-image: url(../image/tablebg.jpg);
+}
+
+#alltable {
+	position:absolute;
+	width:796px;
+	height:596px;
+	z-index:1;
+	left: 373px;
+	top: 242px;
+	
+}
+table.formtable {
+	width:740px; 
+	
+	font-family: "Î¢ÈíÑÅºÚ";
+	font-size:16px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #a9c6c9;
+	border-collapse: collapse;
+}
+table.formtable th {
+	height: 18px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9c6c9;
+}
+table.formtable td {
+	height: 18px;
+	line-height: 18px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #a9c6c9;
+	padding: 8px;
+	
+	
+	
+}
+.oddrowcolor{
+	background-color:#d4e3e5;
+}
+.evenrowcolor{
+	background-color:#c3dde0;
+}
+.searchtext{
+font-size: 16px;
+font-family: 'Hiragino Sans GB','Microsoft Yahei','Î¢ÈíÑÅºÚ','ËÎÌå',Tahoma,Arial,Helvetica,STHeiti;
+width:250px;
+height:32px;
+left: 100px;
+z-index:3;
+margin-top:5px;
+margin-left:50px;
+
+}
+
+.adminsearch{
+width:90px;
+height:32px;
+padding:0;
+line-height:32px;
+z-index:auto;
+margin-top:5px;
+margin-left:5px;
+font-size: 16px;
+font-family: 'Hiragino Sans GB','Microsoft Yahei','Î¢ÈíÑÅºÚ','ËÎÌå',Tahoma,Arial,Helvetica,STHeiti;
+text-align:center;
+
+
+}
+.addmessage{
+width:90px;
+height:32px;
+padding:0;
+line-height:32px;
+z-index:auto;
+margin-top:5px;
+margin-left:5px;
+font-size: 16px;
+font-family: 'Hiragino Sans GB','Microsoft Yahei','Î¢ÈíÑÅºÚ','ËÎÌå',Tahoma,Arial,Helvetica,STHeiti;
+text-align:center;
+
+}
+
+
+
+
+#addlayer{
+border-width: 2px;
+	border-style: solid;
+	border-color: #a9c6c9;
+    position:absolute;
+	width:230px;
+	height:510px;
+	z-index:1;
+	left: 1080px;
+	top: 245px;
+	font-size:24px;
+	text-align:center;
+	font-weight:400;
+	font-family:"Î¢ÈíÑÅºÚ";
+	color:#408080;
+	line-height:80px;
+	
+}
+
+
+#addlayer .addtext{
+position:absolute;
+	width:220px;
+	height:305px;
+	z-index:3;
+	left: 0px;
+	margin-top:80px;
+	margin-left:8px;
+	font-size:16px;
+	font-family:"Î¢ÈíÑÅºÚ";
+	line-height:30px;
+	text-align:left;
+	color:#000000;
+}
+
+.message {color: #666666}
+

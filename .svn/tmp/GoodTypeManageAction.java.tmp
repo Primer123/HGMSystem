@@ -1,0 +1,226 @@
+package action;
+
+<<<<<<< .mine
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import model.GoodTypeInfo;
+import model.MemberInfo;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+import org.springframework.stereotype.Component;
+
+import service.GoodTypeService;
+import service.MemberService;
+
+@ParentPackage(value="json-default")
+@Results({@Result(name="success", location="/jsp/GoodTypeManage.jsp"), 
+	 @Result(name="input", location="/jsp/GoodTypeManage.jsp")})
+@Component
+public class GoodTypeManageAction extends BaseAction {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private GoodTypeInfo goodtype;
+
+	@Resource
+	private GoodTypeService goodTypeService;
+	
+
+	public GoodTypeInfo getGoodType() {
+		return goodtype;
+	}
+
+	public void setGoodType(GoodTypeInfo goodtype) {
+		this.goodtype = goodtype;
+	}
+
+
+	//@Action(value = "/goodtypesearch")//18
+
+	
+=======
+import javax.annotation.Resource;
+
+import model.GoodTypeInfo;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+import org.springframework.stereotype.Component;
+
+import service.GoodTypeService;
+
+@ParentPackage(value="json-default")
+@Results({@Result(name="success", location="/jsp/GoodTypeManage.jsp"),
+	@Result(name="fail", location="/jsp/GoodTypeManage.jsp")})
+@Component
+public class GoodTypeManageAction extends BaseAction{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private GoodTypeInfo goodtype;
+	
+	@Resource
+	private GoodTypeService goodTypeService;
+
+	public GoodTypeInfo getGoodtype() {
+		return goodtype;
+	}
+
+	public void setGoodtype(GoodTypeInfo goodtype) {
+		this.goodtype = goodtype;
+	}
+
+	public GoodTypeService getGoodTypeService() {
+		return goodTypeService;
+	}
+
+	public void setGoodTypeService(GoodTypeService goodTypeService) {
+		this.goodTypeService = goodTypeService;
+	}	
+	
+	@Action(value = "/goodtypesearch")//18
+>>>>>>> .r436
+	public String searchGoodType() throws Exception{
+		String keyword=request.getParameter("keyword");
+		String type="";
+		int judge=goodTypeService.judgeKeyword(keyword);		
+		if(judge==0){
+			if(keyword.length()==1){
+				type="0"+keyword;
+			}
+			else{
+			    type=keyword;
+			}
+			GoodTypeInfo typeinfo=goodTypeService.searchByTypecode(type);
+			request.setAttribute("goodtyperesult", typeinfo);
+			if(typeinfo!=null){
+				return "success";
+			}
+		}
+		else{
+			GoodTypeInfo typeinfo=goodTypeService.searchByTypename(keyword);
+			request.setAttribute("goodtyperesult", typeinfo);
+			if(typeinfo!=null){
+				return "success";
+			}
+		}
+		
+		return "fail";
+	}
+	
+	@Action(value = "/add")//65
+<<<<<<< .mine
+	public String createGoodType() throws Exception {
+		super.execute();
+		
+		goodtype.setTypecode(request.getParameter("goodtype.name"));
+		goodtype.setRemarks(request.getParameter("goodtype.remarks"));
+		
+		boolean typecode = goodTypeService.addNewGoodType(goodtype);
+		
+		List<GoodTypeInfo> goodtypeinfos = goodTypeService.getAllInfo();
+			
+		
+		
+		request.setAttribute("goodtypeinfos", goodtypeinfos);
+		
+		if (typecode == false) {
+			request.setAttribute("msg", 0);
+			return "input";
+		}
+
+		return "success";
+	}
+	
+	
+	//@Action(value = "/update")
+	
+=======
+    public String createGoodType() throws Exception{
+		GoodTypeInfo typeinfo=new GoodTypeInfo();
+		typeinfo.setTypename(request.getParameter("typename"));
+		typeinfo.setRemarks(request.getParameter("remarks"));
+		if(goodTypeService.addNewGoodType(typeinfo)){
+			return "success";
+		}
+		else{
+			return "fail";
+		}
+	}
+	
+	@Action(value = "/update")
+>>>>>>> .r436
+    public String modifyGoodType() throws Exception{
+		GoodTypeInfo typeinfo=new GoodTypeInfo();
+		typeinfo.setId(Integer.parseInt(request.getParameter("id")));
+		typeinfo.setTypecode(request.getParameter("typecode"));
+		typeinfo.setTypename(request.getParameter("typename"));
+		typeinfo.setRemarks(request.getParameter("remarks"));
+		goodTypeService.modifyGoodTypeInfo(typeinfo);
+		return "success";
+	}
+	
+	@Action(value = "/delete")
+<<<<<<< .mine
+	public String deleteGoodType() throws Exception {
+		super.execute();
+		String memberId = request.getParameter("id");
+		System.out.println("===id: " + memberId);
+		
+		memberService.deleteMember(member);
+
+		List<MemberInfo> memberInfos = null;
+		
+		memberService.searchByName("member");
+		if (memberInfos == null) {
+			memberInfos = new ArrayList<MemberInfo>();
+		}
+		
+		for (int i = 0; i < 3; i++) {
+			MemberInfo memberInfo = new MemberInfo();
+			memberInfo.setId(i);
+			memberInfo.setGender(1);
+			memberInfo.setName("name" + i);
+			memberInfo.setRemarks("remarks" + i);
+			memberInfos.add(memberInfo);
+		}
+		
+		request.setAttribute("memberInfos", memberInfos);
+		
+		return "success";
+	}
+	
+=======
+    public String deleteGoodType() throws Exception{
+		GoodTypeInfo typeinfo=new GoodTypeInfo();
+		typeinfo.setId(Integer.parseInt(request.getParameter("id")));
+		typeinfo.setTypecode(request.getParameter("typecode"));
+		typeinfo.setTypename(request.getParameter("typename"));
+		typeinfo.setRemarks(request.getParameter("remarks"));
+		if(!goodTypeService.hasGood(typeinfo)){
+			goodTypeService.deleteGoodType(typeinfo);
+			return "success";
+		}
+		else{
+			return "fail";
+		}
+	}
+>>>>>>> .r436
+    
+
+
+
+}

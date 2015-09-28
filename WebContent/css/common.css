@@ -1,0 +1,74 @@
+label,input,a,span,p{  font-family:"Î¢ÈíÑÅºÚ";  }
+body,td,th {
+	color: #000000;
+}
+#allroom {
+	position:absolute;
+	width:796px;
+	height:580px;
+	z-index:1;
+	left: 373px;
+	top: 242px;
+}
+
+#search {
+	position:absolute;
+	width:746px;
+	height:100px;
+	z-index:1;
+	left: 33px;
+	top: 3px;
+	overflow: hidden;
+	background-image: url(../image/11.jpg);
+
+}
+body {
+	background-color: #FFFFFF;
+	background-image: url();
+	background-repeat: repeat;
+}
+#headerlayer {
+	position:absolute;
+	width:80%;
+	height:150px;
+	z-index:2;
+	left: 100px;
+	top: 20px;
+}
+
+
+.adminAdd{
+	width:90px;
+	height:32px;
+	padding:0;
+	line-height:32px;
+	z-index:auto;
+	margin-top:5px;
+	margin-left:5px;
+	margin-right:55px;
+	font-size: 16px;
+	font-family: 'Hiragino Sans GB','Microsoft Yahei','Î¢ÈíÑÅºÚ','ËÎÌå',Tahoma,Arial,Helvetica,STHeiti;
+	text-align:center;
+}
+
+/** Begin of Popup **/
+.modal-title {
+    font-size: 25px;
+    color:#282b38;
+}
+.modal-header button{
+    font-size: 30px;
+    color:#282b38;
+}
+
+.btn-right {
+    padding: 1px 20px;
+    float:left;
+    margin-left:190px;
+}
+
+.btn-left {
+    padding: 1px 15px;
+    float:right;
+    margin-right:190px;
+}

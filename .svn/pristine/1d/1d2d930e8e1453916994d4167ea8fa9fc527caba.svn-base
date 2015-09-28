@@ -1,0 +1,184 @@
+package service.impl;
+
+import java.text.ParsePosition; 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+import model.RoomInfo;
+import dao.CheckinRecordDao;
+import dao.ReservationRecordDao;
+import dao.RoomDao;
+import dao.RoomTypeDao;
+import entity.CheckinRecord;
+import entity.ReservationRecord;
+import entity.Room;
+import service.RoomService;
+
+public class RoomServiceImpl implements RoomService {
+	private RoomDao roomDao;
+	private RoomTypeDao roomTypeDao;
+	private CheckinRecordDao checkinRecordDao;
+	private ReservationRecordDao reservationRecordDao;
+
+	@Override
+	public List<RoomInfo> getTargetRooms(String checkinDate,
+			String checkoutDate, int typeid, String floorname,
+			List<String> properties) {
+		List<Room> roomlist=roomDao.findByTypeid(typeid);
+		List<Room> roombyfloor=roomDao.findByFloorname(floorname);
+		List<Room> roombypro=roomDao.findByProperties(properties);
+		roomlist.retainAll(roombyfloor);
+		roomlist.retainAll(roombypro);
+		//得到这些房间已有的入住和预订列表
+		int i,j;
+		List<CheckinRecord> inbyroom=new ArrayList<CheckinRecord>();
+		List<ReservationRecord> rsrvbyroom=new ArrayList<ReservationRecord>();
+		for(i=0;i<roomlist.size();i++){
+			inbyroom.addAll(checkinRecordDao.findByRoomNum(roomlist.get(i).getRoomnum()));
+			rsrvbyroom.addAll(reservationRecordDao.findByRoomnum(roomlist.get(i).getRoomnum()));
+		}
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date indate=formatter.parse(checkinDate, new ParsePosition(0));
+		Date outdate=formatter.parse(checkoutDate, new ParsePosition(0));
+		//去除因“已入住”而无法预订的房间
+		for(i=0;i<inbyroom.size();i++){
+			CheckinRecord in=inbyroom.get(i);			
+			Date startdate=formatter.parse(in.getArrivingdt(), new ParsePosition(0));
+			Date enddate=formatter.parse(in.getDeparturedt(), new ParsePosition(0));			
+			boolean judge=(enddate.before(indate))||(startdate.after(outdate));
+			if(!judge){
+			    for(j=0;j<roomlist.size();j++){
+				    if(roomlist.get(j).getRoomnum().equals(in.getRoomnum())){
+				 	    roomlist.remove(j);
+					    break;
+				    }
+			    }
+			}		
+					
+		}
+		//去除因“已预订”而无法预订的房间
+		for(i=0;i<rsrvbyroom.size();i++){
+			ReservationRecord rsrv=rsrvbyroom.get(i);
+			Date startdate=formatter.parse(rsrv.getArrivingdt(), new ParsePosition(0));
+			Date enddate=formatter.parse(rsrv.getDeparturedt(), new ParsePosition(0));	
+			boolean judge=(enddate.before(indate))||(startdate.after(outdate));
+			if(!judge){
+				for(j=0;j<roomlist.size();j++){
+				if(roomlist.get(j).getRoomnum().equals(rsrv.getRoomnum())){
+						roomlist.remove(j);
+						break;
+					}
+				}
+			}		
+		}
+		
+		List<RoomInfo> infolist=new ArrayList<RoomInfo>();
+		for(i=0;i<roomlist.size();i++){
+			infolist.add(convertEntity(roomlist.get(i)));
+		}
+		return infolist;
+	}
+	
+	@Override
+	public String newRoomNum(int floor) {
+		int room=roomDao.findByFloorname(floor+"楼").size()+1;
+		String num="";
+		if(room<10)
+			num="0"+room;
+		else
+			num=""+room;
+		String roomnum="8";
+		if(floor<10){
+			roomnum=roomnum+"0"+floor+num;
+		}
+		else{
+			roomnum=roomnum+floor+num;
+		}
+		return roomnum;
+	}
+	
+	private boolean roomExisted(String roomnum) {
+		Room room=roomDao.findByRoomnum(roomnum);
+		if(room!=null)
+			return true;
+		else
+		    return false;
+	}	
+	
+	@Override
+	public boolean addNewRoom(RoomInfo roominfo) {
+		if(!roomExisted(roominfo.getRoomnum())){
+			Room roomentity = convertInfo(roominfo);
+			roomDao.create(roomentity);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void modifyRoomInfo(RoomInfo roominfo) {
+		Room roomentity = convertInfo(roominfo);
+		roomDao.modify(roomentity);
+	}
+
+	@Override
+	public void deleteRoom(RoomInfo roominfo) {
+		Room roomentity = convertInfo(roominfo);
+		roomDao.delete(roomentity);
+	}
+
+	@Override
+	public void deleteRooms(List<RoomInfo> roomlist) {
+		List<Room> entitylist = new ArrayList<Room>();
+		for (int i = 0; i < roomlist.size(); i++) {
+			Room roomentity = convertInfo(roomlist.get(i));
+			entitylist.add(roomentity);
+		}
+		roomDao.delete(entitylist);
+	}
+
+	private Room convertInfo(RoomInfo info) {
+		Room roomentity = new Room();
+		int typeid = info.getTypeid();
+		roomentity.setId(info.getId());
+		roomentity.setRoomnum(info.getRoomnum());
+		roomentity.setTypeid(typeid);
+		roomentity.setRoomstate(info.getRoomstate());
+		roomentity.setFloorname(info.getFloorname());
+		roomentity.setProperties(info.getProperties());
+		roomentity.setRemarks(info.getRemarks());
+		return roomentity;
+	}
+	
+	private RoomInfo convertEntity(Room entity){
+		RoomInfo info=new RoomInfo();
+		info.setId(entity.getId());
+		info.setRoomnum(entity.getRoomnum());
+		info.setTypeid(entity.getTypeid());
+		info.setRoomstate(entity.getRoomstate());
+		info.setFloorname(entity.getFloorname());
+		info.setProperties(entity.getProperties());
+		info.setRemarks(entity.getRemarks());
+		return info;
+	}
+
+	public RoomDao getRoomDao() {
+		return roomDao;
+	}
+
+	public void setRoomDao(RoomDao roomDao) {
+		this.roomDao = roomDao;
+	}
+
+	public RoomTypeDao getRoomTypeDao() {
+		return roomTypeDao;
+	}
+
+	public void setRoomTypeDao(RoomTypeDao roomTypeDao) {
+		this.roomTypeDao = roomTypeDao;
+	}	
+}

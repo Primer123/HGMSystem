@@ -1,0 +1,107 @@
+package action;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import model.GoodTypeInfo;
+import model.MemberInfo;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+import org.springframework.stereotype.Component;
+
+import service.GoodTypeService;
+import service.MemberService;
+
+@ParentPackage(value="json-default")
+@Results({@Result(name="success", location="/jsp/GoodTypeManage.jsp"), 
+	 @Result(name="input", location="/jsp/GoodTypeManage.jsp")})
+@Component
+public class GoodTypeManageAction extends BaseAction {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private GoodTypeInfo goodtype;
+
+	@Resource
+	private GoodTypeService goodTypeService;
+	
+
+	public GoodTypeInfo getGoodType() {
+		return goodtype;
+	}
+
+	public void setGoodType(GoodTypeInfo goodtype) {
+		this.goodtype = goodtype;
+	}
+
+
+	//@Action(value = "/goodtypesearch")//18
+
+	
+	@Action(value = "/add")//65
+	public String createGoodType() throws Exception {
+		super.execute();
+		
+		goodtype.setTypecode(request.getParameter("goodtype.name"));
+		goodtype.setRemarks(request.getParameter("goodtype.remarks"));
+		
+		boolean typecode = goodTypeService.addNewGoodType(goodtype);
+		
+		List<GoodTypeInfo> goodtypeinfos = goodTypeService.getAllInfo();
+			
+		
+		
+		request.setAttribute("goodtypeinfos", goodtypeinfos);
+		
+		if (typecode == false) {
+			request.setAttribute("msg", 0);
+			return "input";
+		}
+
+		return "success";
+	}
+	
+	
+	//@Action(value = "/update")
+	
+	@Action(value = "/delete")
+	public String deleteGoodType() throws Exception {
+		super.execute();
+		String memberId = request.getParameter("id");
+		System.out.println("===id: " + memberId);
+		
+		memberService.deleteMember(member);
+
+		List<MemberInfo> memberInfos = null;
+		
+		memberService.searchByName("member");
+		if (memberInfos == null) {
+			memberInfos = new ArrayList<MemberInfo>();
+		}
+		
+		for (int i = 0; i < 3; i++) {
+			MemberInfo memberInfo = new MemberInfo();
+			memberInfo.setId(i);
+			memberInfo.setGender(1);
+			memberInfo.setName("name" + i);
+			memberInfo.setRemarks("remarks" + i);
+			memberInfos.add(memberInfo);
+		}
+		
+		request.setAttribute("memberInfos", memberInfos);
+		
+		return "success";
+	}
+	
+    
+
+
+
+}

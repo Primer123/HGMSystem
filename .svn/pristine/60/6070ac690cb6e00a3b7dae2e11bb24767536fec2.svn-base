@@ -1,0 +1,114 @@
+package service.impl;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import model.ReservationInfo;
+import dao.LogFileDao;
+import dao.ReservationRecordDao;
+import dao.RoomDao;
+import dao.StaffDao;
+import entity.ReservationRecord;
+import service.ReservationService;
+
+public class ReservationServiceImpl implements ReservationService {
+	private ReservationRecordDao reservationRecordDao;
+	private RoomDao roomDao;
+	private StaffDao staffDao;
+	private LogFileDao logFileDao;
+	
+	@Override
+	public void addNewReservation(ReservationInfo rsrvinfo, String staffid) {
+		String rsrvnum=newRsrvnum(rsrvinfo.getRoomnum());
+		rsrvinfo.setRsrvnum(rsrvnum);
+		ReservationRecord rsrv=transferModelToEntity(rsrvinfo, staffid);
+		reservationRecordDao.create(rsrv);
+	}
+
+	@Override
+	public void modifyReservationInfo(ReservationInfo rsrvinfo, String staffid) {
+		ReservationRecord rsrv=transferModelToEntity(rsrvinfo, staffid);
+		reservationRecordDao.modify(rsrv);
+	}
+
+	@Override
+	public void cancelReservation(ReservationInfo rsrvinfo, String staffid) {
+		ReservationRecord rsrv=transferModelToEntity(rsrvinfo, staffid);
+		reservationRecordDao.delete(rsrv);
+	}
+	
+	private String newRsrvnum(String roomnum) {
+		Date now = new Date(); 
+		SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String today=dateFormat1.format(now);
+		String today1=dateFormat1.format(now)+" 00:00:00";
+		String today2=dateFormat2.format(now);		
+		List<ReservationRecord> todayrsrvlist=reservationRecordDao.findByRsrvdt(today1, today2);
+		int account=0;
+		for(int i=0;i<todayrsrvlist.size();i++){
+			if(todayrsrvlist.get(i).getRoomnum().equals(roomnum)){
+				account++;
+			}
+		}
+		account++;
+		String rsrvnum=today+roomnum;
+		if(account<10){
+			rsrvnum+="0"+account;
+		}
+		else{
+			rsrvnum+=+account;
+		}
+		return rsrvnum;
+	}
+	
+	private ReservationRecord transferModelToEntity(ReservationInfo info,String staffid){
+		ReservationRecord entity=new ReservationRecord();
+		
+		Date now = new Date(); 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String rsrvdt = dateFormat.format( now ); 
+		
+		entity.setId(info.getId());
+		entity.setRsrvnum(info.getRsrvnum());
+		entity.setRoomnum(info.getRoomnum());
+		entity.setReservationdt(rsrvdt);
+		entity.setName(info.getName());
+		entity.setIdtype(info.getIdtype());
+		entity.setIdnum(info.getIdnum());
+		entity.setTelnum(info.getTelnum());
+		entity.setArrivingdt(info.getArrivingdt());
+		entity.setDeparturedt(info.getDeparturedt());
+		entity.setStaffid(staffid);
+		entity.setMemberid(info.getMemberid());
+		entity.setRsrvstate(info.getRsrvstate());
+		entity.setRemarks(info.getRemarks());
+		return entity;
+	}
+	
+	public ReservationRecordDao getReservationRecordDao() {
+		return reservationRecordDao;
+	}
+	public void setReservationRecordDao(ReservationRecordDao reservationRecordDao) {
+		this.reservationRecordDao = reservationRecordDao;
+	}
+	public RoomDao getRoomDao() {
+		return roomDao;
+	}
+	public void setRoomDao(RoomDao roomDao) {
+		this.roomDao = roomDao;
+	}
+	public StaffDao getStaffDao() {
+		return staffDao;
+	}
+	public void setStaffDao(StaffDao staffDao) {
+		this.staffDao = staffDao;
+	}
+	public LogFileDao getLogFileDao() {
+		return logFileDao;
+	}
+	public void setLogFileDao(LogFileDao logFileDao) {
+		this.logFileDao = logFileDao;
+	}	
+}

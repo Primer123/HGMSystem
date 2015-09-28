@@ -1,0 +1,12 @@
+package action;
+
+public class GoodTypeManageAction extends BaseAction{
+	@Action(value = "/goodtypesearch")//18
+	@Action(value = "/add")//65
+	@Action(value = "/update")
+	@Action(value = "/delete")
+    
+
+
+
+}

@@ -1,0 +1,101 @@
+#worklist {
+	position:absolute;
+	width:253px;
+	height:505px;
+	z-index:2;
+	left: -272px;
+	top: -27px;
+}
+
+#allroomtable {
+	position:absolute;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #a9c6c9;
+	width:740px;
+	height:519px;
+	z-index:3;
+	left: 35px;
+	top: 104px;
+	background-image: url(../image/tablebg.jpg);
+}
+#alltable {
+	position:absolute;
+	width:796px;
+	height:596px;
+	z-index:1;
+	left: 373px;
+	top: 242px;
+	
+}
+
+
+#Layer3 {
+	position:absolute;
+	width:1012px;
+	height:467px;
+	z-index:2;
+	left: 52px;
+	top: 230px;
+	background-color: #66FFFF;
+	visibility: visible;
+}
+#picture1 {
+	position:absolute;
+	width:90px;
+	height:98px;
+	z-index:3;
+	left: 1077px;
+	top: 728px;
+}
+.STYLE7 {
+	font-family: "Î¢ÈíÑÅºÚ";
+	font-size: 16px;
+}
+
+table.formtable {
+	width:740px; 
+	font-family: "Î¢ÈíÑÅºÚ";
+	font-size:14px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #a9c6c9;
+	border-collapse: collapse;
+}
+table.formtable th {
+	height: 14px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9c6c9;
+}
+table.formtable td {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #a9c6c9;
+	padding: 8px;
+	height: 14px;
+	line-height: 14px;
+}
+.oddrowcolor{
+	background-color:#d4e3e5;
+}
+.evenrowcolor{
+	background-color:#c3dde0;
+}
+.searchroom{
+position:absolute;
+width:80px;
+height:35px;
+left:500px;
+
+}
+#alltable .searchInfo{
+text-align:center;
+width:500px;
+height:50px;
+font-family:Arial, Helvetica, sans-serif;
+font-size:16px;
+
+}
+

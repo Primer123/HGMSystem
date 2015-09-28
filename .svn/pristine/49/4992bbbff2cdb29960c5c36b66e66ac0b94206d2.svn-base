@@ -1,0 +1,40 @@
+package service.impl;
+
+import model.CheckinInfo;
+
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import service.CheckinService;
+
+public class CheckinServiceImplTest {
+	ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
+			"applicationContext.xml");
+	CheckinService checkinService = (CheckinService) ctx
+			.getBean("CheckinService");
+
+	@Test
+	public void testCheckinCheckinInfoListOfGuestString() {
+		CheckinInfo checkinInfo = new CheckinInfo();
+		checkinInfo.setRoomnum();
+		checkinInfo.setDeposit();
+		checkinInfo.setPaymeth();
+		checkinInfo.setArrivingdt();
+		checkinInfo.setDeparturedt();
+		checkinInfo.setMemberid();
+		checkinInfo.setBreakfast();
+		checkinInfo.setRemarks();
+		
+	}
+
+	@Test
+	public void testCheckinReservationInfo() {
+
+	}
+
+	@Test
+	public void testPrintCheckinBill() {
+
+	}
+
+}

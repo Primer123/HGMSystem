@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 使用 annotation -->
+	<context:annotation-config />
+<!--  配置sessionFactory  -->
+	
+	<!-- dao -->
+	<bean id="CheckinRecordDao" class="dao.impl.CheckinRecordDaoImpl">		
+	</bean>	
+	<bean id="CheckoutRecordDao" class="dao.impl.CheckoutRecordDaoImpl">		
+	</bean>
+	<bean id="CommodityDiscDao" class="dao.impl.CommodityDiscDaoImpl">		
+	</bean>
+	<bean id="ConsumptionRecordDao" class="dao.impl.ConsumptionRecordDaoImpl">		
+	</bean>
+	<bean id="FloorDao" class="dao.impl.FloorDaoImpl">		
+	</bean>
+	<bean id="GoodDao" class="dao.impl.GoodDaoImpl">		
+	</bean>
+	<bean id="GoodTypeDao" class="dao.impl.GoodTypeDaoImpl">		
+	</bean>
+	<bean id="GuestDao" class="dao.impl.GuestDaoImpl">		
+	</bean>
+	<bean id="LogFileDao" class="dao.impl.LogFileDaoImpl">		
+	</bean>
+	<bean id="MemberDao" class="dao.impl.MemberDaoImpl">		
+	</bean>
+	<bean id="ReservationRecordDao" class="dao.impl.ReservationRecordDaoImpl">		
+	</bean>
+	<bean id="RoomDao" class="dao.impl.RoomDaoImpl">		
+	</bean>
+	<bean id="RoomTypeDao" class="dao.impl.RoomTypeDaoImpl">		
+	</bean>
+	<bean id="StaffDao" class="dao.impl.StaffDaoImpl">		
+	</bean>
+	<bean id="WakeupDao" class="dao.impl.WakeupDaoImpl">		
+	</bean>
+	
+	<!-- service -->
+	<bean id="CheckinRcdSearchService" class="service.impl.CheckinRcdSearchServiceImpl">
+		<property name="checkinRecordDao">
+			<ref bean="CheckinRecordDao"/>
+		</property>
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+		<property name="roomTypeDao">
+			<ref bean="RoomTypeDao"/>
+		</property>
+		<property name="guestDao">
+			<ref bean="GuestDao"/>
+		</property>
+		<property name="staffDao">
+			<ref bean="StaffDao"/>
+		</property>
+		<property name="memberDao">
+			<ref bean="MemberDao"/>
+		</property>
+	</bean>
+	<bean id="CheckinService" class="service.impl.CheckinServiceImpl">
+		<property name="checkinRecordDao">
+			<ref bean="CheckinRecordDao"/>
+		</property>
+		<property name="reservationRecordDao">
+			<ref bean="ReservationRecordDao"/>
+		</property>
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+		<property name="roomTypeDao">
+			<ref bean="RoomTypeDao"/>
+		</property>
+		<property name="guestDao">
+			<ref bean="GuestDao"/>
+		</property>
+		<property name="memberDao">
+			<ref bean="MemberDao"/>
+		</property>
+		<property name="logFileDao">
+			<ref bean="LogFileDao"/>
+		</property>
+		<property name="staffDao">
+			<ref bean="StaffDao"/>
+		</property>
+	</bean>	
+	<bean id="CheckoutService" class="service.impl.CheckoutServiceImpl">
+		<property name="checkoutRecordDao">
+			<ref bean="CheckoutRecordDao"/>
+		</property>
+		<property name="checkinRecordDao">
+			<ref bean="CheckinRecordDao"/>
+		</property>
+		<property name="consumptionRecordDao">
+			<ref bean="ConsumptionRecordDao"/>
+		</property>
+		<property name="commodityDiscDao">
+			<ref bean="CommodityDiscDao"/>
+		</property>		
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+		<property name="roomTypeDao">
+			<ref bean="RoomTypeDao"/>
+		</property>
+		<property name="logFileDao">
+			<ref bean="LogFileDao"/>
+		</property>
+		<property name="memberDao">
+			<ref bean="MemberDao"/>
+		</property>	
+		<property name="staffDao">
+			<ref bean="StaffDao"/>
+		</property>
+	</bean>	
+	<bean id="CommodityDiscService" class="service.impl.CommodityDiscServiceImpl">
+		<property name="commodityDiscDao">
+			<ref bean="CommodityDiscDao"/>
+		</property>
+		<property name="memberDao">
+			<ref bean="MemberDao"/>
+		</property>
+	</bean>	
+	<bean id="ConsumptionService" class="service.impl.ConsumptionServiceImpl">
+		<property name="checkinRecordDao">
+			<ref bean="CheckinRecordDao"/>
+		</property>
+		<property name="memberDao">
+			<ref bean="MemberDao"/>
+		</property>
+		<property name="consumptionRecordDao">
+			<ref bean="ConsumptionRecordDao"/>
+		</property>
+		<property name="commodityDiscDao">
+			<ref bean="CommodityDiscDao"/>
+		</property>
+		<property name="goodDao">
+			<ref bean="GoodDao"/>
+		</property>
+		<property name="logFileDao">
+			<ref bean="LogFileDao"/>
+		</property>
+		<property name="staffDao">
+			<ref bean="StaffDao"/>
+		</property>
+	</bean>
+	<bean id="FloorService" class="service.impl.FloorServiceImpl">
+		<property name="floorDao">
+			<ref bean="FloorDao"/>
+		</property>
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+	</bean>
+	<bean id="GoodService" class="service.impl.GoodServiceImpl">
+		<property name="goodDao">
+			<ref bean="GoodDao"/>
+		</property>
+		<property name="goodTypeDao">
+			<ref bean="GoodTypeDao"/>
+		</property>
+	</bean>
+	<bean id="GoodTypeService" class="service.impl.GoodTypeServiceImpl">
+		<property name="goodDao">
+			<ref bean="GoodDao"/>
+		</property>
+		<property name="goodTypeDao">
+			<ref bean="GoodTypeDao"/>
+		</property>
+	</bean>
+	<bean id="GuestService" class="service.impl.GuestServiceImpl">
+		<property name="guestDao">
+			<ref bean="GuestDao"/>
+		</property>
+	</bean>
+	<bean id="LogFileService" class="service.impl.LogFileServiceImpl">
+		<property name="logFileDao">
+			<ref bean="LogFileDao"/>
+		</property>
+		<property name="staffDao">
+			<ref bean="StaffDao"/>
+		</property>
+	</bean>
+	<bean id="MemberService" class="service.impl.MemberServiceImpl">
+		<property name="memberDao">
+			<ref bean="MemberDao"/>
+		</property>
+		<property name="checkinRecordDao">
+			<ref bean="CheckinRecordDao"/>
+		</property>
+		<property name="reservationRecordDao">
+			<ref bean="ReservationRecordDao"/>
+		</property>
+	</bean>
+	<bean id="ReportsService" class="service.impl.ReportsServiceImpl">
+		<property name="checkinRecordDao">
+			<ref bean="CheckinRecordDao"/>
+		</property>
+		<property name="checkoutRecordDao">
+			<ref bean="CheckoutRecordDao"/>
+		</property>
+		<property name="reservationRecordDao">
+			<ref bean="ReservationRecordDao"/>
+		</property>
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+		<property name="roomTypeDao">
+			<ref bean="RoomTypeDao"/>
+		</property>
+		<property name="guestDao">
+			<ref bean="GuestDao"/>
+		</property>
+	</bean>
+	<bean id="ReservationService" class="service.impl.ReservationServiceImpl">
+		<property name="reservationRecordDao">
+			<ref bean="ReservationRecordDao"/>
+		</property>
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+		<property name="staffDao">
+			<ref bean="StaffDao"/>
+		</property>
+		<property name="logFileDao">
+			<ref bean="LogFileDao"/>
+		</property>
+	</bean>
+	<bean id="RoomService" class="service.impl.RoomServiceImpl">
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+		<property name="roomTypeDao">
+			<ref bean="RoomTypeDao"/>
+		</property>
+		<property name="checkinRecordDao">
+			<ref bean="CheckinRecordDao"/>
+		</property>
+		<property name="reservationRecordDao">
+			<ref bean="ReservationRecordDao"/>
+		</property>
+	</bean>
+	<bean id="RoomTypeService" class="service.impl.RoomTypeServiceImpl">
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+		<property name="roomTypeDao">
+			<ref bean="RoomTypeDao"/>
+		</property>
+		<property name="checkinRecordDao">
+			<ref bean="CheckinRecordDao"/>
+		</property>
+		<property name="reservationRecordDao">
+			<ref bean="ReservationRecordDao"/>
+		</property>
+	</bean>	
+	<bean id="RsrvRcdSearchService" class="service.impl.RsrvRcdSearchServiceImpl">
+		<property name="reservationRecordDao">
+			<ref bean="ReservationRecordDao"/>
+		</property>
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+		<property name="roomTypeDao">
+			<ref bean="RoomTypeDao"/>
+		</property>
+		<property name="staffDao">
+			<ref bean="StaffDao"/>
+		</property>
+		<property name="memberDao">
+			<ref bean="MemberDao"/>
+		</property>
+	</bean>
+	<bean id="StaffService" class="service.impl.StaffServiceImpl">
+		<property name="staffDao">
+			<ref bean="StaffDao"/>
+		</property>
+	</bean>
+	<bean id="WakeupService" class="service.impl.WakeupServiceImpl">
+		<property name="wakeupDao">
+			<ref bean="WakeupDao"/>
+		</property>
+		<property name="roomDao">
+			<ref bean="RoomDao"/>
+		</property>
+	</bean>
+	
+	<!-- action -->
+	<bean id="BlogManageAction" class="action.BlogManageAction">
+		<property name="logFileService">
+			<ref bean="LogFileService"/>
+		</property>		
+	</bean>
+	
+	
+	<bean id="RecordFormAction" class="action.RecordFormAction">
+		<property name="reportsService">
+			<ref bean="ReportsService"/>
+		</property>		
+	</bean>
+	
+	<bean id="CheckinFormAction" class="action.CheckinFormAction">
+		<property name="reportsService">
+			<ref bean="ReportsService"/>
+		</property>		
+	</bean>
+	
+	<bean id="TcheckinFormAction" class="action.TcheckinFormAction">
+		<property name="reportsService">
+			<ref bean="ReportsService"/>
+		</property>		
+	</bean>
+	
+	<bean id="TfinanceFormAction" class="action.TfinanceFormAction">
+		<property name="reportsService">
+			<ref bean="ReportsService"/>
+		</property>		
+	</bean>
+	
+	<bean id="TrecordFormAction" class="action.TrecordFormAction">
+		<property name="reportsService">
+			<ref bean="ReportsService"/>
+		</property>		
+	</bean>
+
+	<bean id="TcheckoutFormAction" class="action.TcheckoutFormAction">
+		<property name="reportsService">
+			<ref bean="ReportsService"/>
+		</property>		
+	</bean>
+	<bean id="RoomSearchAction" class="action.RoomSearchAction">
+		<property name="roomTypeService">
+			<ref bean="RoomTypeService"/>
+		</property>
+	</bean>
+	
+	
+</beans>

@@ -1,0 +1,44 @@
+package dao;
+
+import java.util.List;
+
+import entity.CheckinRecord;
+
+public interface CheckinRecordDao {
+	public void create(CheckinRecord checkinRecord);
+
+	public void modify(CheckinRecord checkinRecord);
+
+	public void delete(CheckinRecord checkinRecord);
+
+	public void delete(List<CheckinRecord> checkinRecords);
+
+	public CheckinRecord findById(int id);
+
+	public CheckinRecord findByCRNum(String checkinNum, String roomNum);
+
+	public List<CheckinRecord> findByCheckinNum(String checkinNum);
+
+	public List<CheckinRecord> findByRoomNum(String roomNum);
+
+	public List<CheckinRecord> findByMemberId(String memberId);
+
+	public List<CheckinRecord> findByArrivingDT(String arrivingdt1,
+			String arrivingdt2);
+	
+	public List<CheckinRecord> findByArrivingDate(String arrivingDate);
+
+	public List<CheckinRecord> findByDepartureDT(String departuredt1,
+			String departuredt2);
+	
+	public List<CheckinRecord> findByDepartureDate(String departureDate);
+
+	public List<CheckinRecord> findByARdt(String arrivingdt1,
+			String arrivingdt2, String departuredt1,
+			String departuredt2);
+	
+	/*
+	 * 找出入住期间包含某日的所有入住信息
+	 */
+	public List<CheckinRecord> findByParticularDay(String date);
+}

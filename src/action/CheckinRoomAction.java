@@ -1,0 +1,16 @@
+package action;
+
+import javax.xml.ws.Action;
+
+public class CheckinRoomAction extends BaseAction {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	//@Action(value = "/roomsearch")//23
+	//@Action(value = "/checkinroom")//95 ÏÈ±ðÐ´
+	
+	
+
+}

@@ -1,0 +1,50 @@
+package service.impl;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class GoodServiceImplTest {
+
+	ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
+			"applicationContext.xml");
+	GoodService goodService = (GoodService) ctx.getBean("GoodService");
+	
+	@Test
+	public void testGetAllGoods() {
+		List<GoodInfo> list=goodService.getAllGoods();
+		assertEquals(list.get(5).getGoodcode(),"01001");
+	}
+	
+	@Test
+	public void testSearchByType(){
+		List<String> typelist=new ArrayList<String>();
+		typelist.add("07");
+		List<GoodInfo> list=goodService.searchGoodByType(typelist);
+		assertEquals(list.get(1).getGoodcode(),"07002");
+	}
+	
+	@Test
+	public void testAddNewGood1(){
+		GoodInfo info=new GoodInfo();
+		info.setGoodname("ÍÞ¹þ¹þ¹ûÄÌ");
+		info.setTypecode("08");
+		info.setUnitprice(2.5);
+		info.setUnitsymbol("Æ¿");
+		goodService.addNewGood(info);
+	}
+	
+	@Test
+	public void testAddNewGood2(){
+		GoodInfo info=new GoodInfo();
+		info.setGoodname("ÍÞ¹þ¹þ¹ûÄÌ");
+		info.setTypecode("08");
+		info.setUnitprice(2.5);
+		info.setUnitsymbol("Æ¿");
+		assertEquals(goodService.addNewGood(info),false);
+	}
+	
+	@Test
+	public void
+
+}

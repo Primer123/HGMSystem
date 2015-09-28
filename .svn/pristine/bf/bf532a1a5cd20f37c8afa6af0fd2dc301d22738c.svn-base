@@ -1,0 +1,21 @@
+package service;
+
+import model.ReservationInfo;
+
+public interface ReservationService {
+	
+	/*
+	 * 新增预定
+	 */
+	public void addNewReservation(ReservationInfo rsrvinfo,String staffid);
+	
+	/*
+	 * 修改预定信息
+	 */
+	public void modifyReservationInfo(ReservationInfo rsrvinfo,String staffid);
+	
+	/*
+	 * 取消预订
+	 */
+	public void cancelReservation(ReservationInfo rsrvinfo,String staffid);
+}

@@ -1,0 +1,87 @@
+<%@ page contentType="text/html; charset=gb2312" language="java" import="java.sql.*" errorPage="" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>前台预订信息管理</title>
+
+<%@ include file="common/CommonWaiterHead.jsp" %>
+</head>
+<body onload="MM_preloadImages('image/ydxx1.jpg','image/djrz1.jpg','image/hfgl1.jpg','image/tfjz1.jpg','image/ydzrz1.jpg')">
+<!-- header -->
+<%@ include file="common/CommonHeader.jsp" %>
+
+<!-- frame -->
+
+<!-- content -->
+<div id="content">
+<div class="maincontent">
+<div class="worklist">
+<div id="allroom">
+<div id="search">
+    <form id="form1" name="form1" method="post" action="">
+      <label for="Submit"></label>
+      <label for="textfield">预订单号</label>
+      <input name="textfield" type="text" id="textfield" size="18" maxlength="20" />
+      <label for="label">预订人</label>
+      <input name="textfield2" type="text" id="label" size="18" maxlength="20" />
+      <label for="select"></label>
+      <label for="label2"></label>
+       <label for="label3"></label>
+       <label for="label2">客房编号</label>
+       <input name="textfield3" type="text" id="label2" size="18" maxlength="20" /><br />
+       <label for="select">客房类型</label>
+       <select name="select" id="select">
+         <option>普通大床房</option>
+         <option>豪华大床房</option>
+       </select>
+       <label for="label3"></label>
+       <input type="button" name="searchroom" value="&#25628;&#32034;&#25151;&#38388;" id="searchroom" />
+        <label for="Submit"></label>
+    </form>
+    </div>
+ <div id="allroomlayer">
+  <p class="roomInformation"><span class="roomInformation"></span>
+  <a href="RoomRecord.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('roomInformation','','../image/kfyd1.jpg',1)"><img src="../image/kfyd.jpg" name="roomrecord" width="250" height="80" border="0" id="roomrecord" /></a>
+  <a href="RecordManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordRoom','','../image/ydxx1.jpg',1)"><img src="../image/ydxx.jpg" name="recordInformation" width="250" height="80" border="0" id="recordInformation" /></a>
+  <a href="RecordCheckin.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordRoom','','../image/ydzrz1.jpg',1)"><img src="../image/ydzrz.jpg" name="recordcheckin" width="250" height="80" border="0" id="recordcheckin" /></a>
+  <a href="CheckinRoom.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('checkinRoom','','../image/djrz1.jpg',1)"><img src="../image/djrz.jpg" name="checkinRoom" width="250" height="80" border="0" id="checkinRoom" /></a>
+  <a href="ChangeRoom.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('changeRoom','','../image/hfgl1.jpg',1)"><img src="../image/hfgl.jpg" name="changeRoom" width="250" height="80" border="0" id="changeRoom" /></a>
+  <a href="CheckoutRoom.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('checkoutRoom','','../image/tfjz1.jpg',1)"><img src="../image/tfjz.jpg" name="checkoutRoom" width="250" height="80" border="0" id="checkoutRoom" /></a>
+  </p>
+  </div>
+  <div id="allroomtable" class="STYLE6">
+    <table width="740"  class="roomtable" height="355" border="1px">
+      <tr>
+	<th width="188" height="55">预订单号</th>
+	<th width="188">预订人</th>
+	<th width="188">预订状态</th>
+	<th width="62">楼层</th>
+	<th width="62">修改</th>
+	<th width="62">删除</th>
+</tr>
+<tr>
+	<td>Text 1A</td><td>Text 1B</td><td>Text 1C</td><td>Text 1C</td>
+</tr>
+<tr>
+	<td>Text 2A</td>
+	<td>Text 2B</td><td>Text 2C</td><td>Text 1C</td>
+<tr>
+	<td>Text 3A</td><td>Text 3B</td><td>Text 3C</td><td>Text 1C</td>
+</tr>
+<tr>
+	<td>Text 4A</td><td>Text 4B</td><td>Text 4C</td><td>Text 1C</td>
+</tr>
+<tr>
+	<td>Text 5A</td><td>Text 5B</td><td>Text 5C</td><td>Text 1C</td>
+</tr>
+</table>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<%@ include file="common/CommonJs.jsp" %>
+</body>
+</html>

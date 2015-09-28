@@ -1,0 +1,16 @@
+package action;
+
+import javax.xml.ws.Action;
+
+public class GoodManageAction extends BaseAction{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	//@Action(value = "/goodsearch")//19
+	//@Action(value = "/add")//64
+	//@Action(value = "/update")
+	//@Action(value = "/delete")
+
+}

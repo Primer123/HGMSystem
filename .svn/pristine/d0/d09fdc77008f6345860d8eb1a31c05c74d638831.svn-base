@@ -1,0 +1,99 @@
+<%@ page contentType="text/html; charset=gb2312" language="java" import="java.sql.*" errorPage="" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>前台登记入住管理</title>
+<%@ include file="common/CommonWaiterHead.jsp" %>
+</head>
+<body onload="MM_preloadImages('../image/djrz1.jpg','../image/hfgl1.jpg','../image/tfjz1.jpg','../image/ydxx1.jpg','../image/ydzrz1.jpg')">
+<!-- header -->
+<%@ include file="common/CommonHeader.jsp" %>
+
+<!-- content -->
+<div id="content">
+<div class="maincontent">
+<div class="worklist">
+<div id="allroom">
+<div id="search">
+    <form action=" " method="post" enctype="multipart/form-data" name="form1" id="form1">
+      <label for="textfield" >入住时间</label>
+      <input name="textfield" type="text" id="textfield" size="10"  onFocus="c.showMoreDay = false;c.show(this);" />
+      <label for="label4">退房时间</label>
+      <input name="textfield2" type="text" id="label4" size="10" onFocus="c.showMoreDay = false;c.show(this);"/>
+      <label for="select">成人数</label>
+      <select name="select" id="select">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+      </select>
+      <label for="label">儿童数</label>
+      <select name="select2" id="label">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+      </select>
+      <label for="textfield"></label> 
+      <label for="file"></label>
+      <br />
+      <label for="label2">房间类型</label>
+      <select name="select3" id="label2">
+        <option>标准间</option>
+        <option>大床房</option>
+        <option>豪华房</option>
+      </select>
+      <label for="label2"></label>
+      <input type="radio" name="radiobutton" value="radiobutton" id="radiobutton" />
+      <label for="radiobutton">无烟房</label>
+      <input type="radio" name="radiobutton" value="radiobutton" id="radio" />
+      <label for="radio">有烟房</label>
+      <input type="button" name="searchroom" value="&#25628;&#32034;&#25151;&#38388;" id="searchroom" />
+        <label for="Submit"></label>
+    </form>
+    </div>
+ <div id="allroomlayer">
+  <p class="roomInformation"><span class="roomInformation"></span>
+  <a href="RoomRecord.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('roomInformation','','../image/kfyd1.jpg',1)"><img src="../image/kfyd.jpg" name="roomrecord" width="250" height="80" border="0" id="roomrecord" /></a>
+  <a href="RecordManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordRoom','','../image/ydxx1.jpg',1)"><img src="../image/ydxx.jpg" name="recordInformation" width="250" height="80" border="0" id="recordInformation" /></a>
+  <a href="RecordCheckin.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordRoom','','../image/ydzrz1.jpg',1)"><img src="../image/ydzrz.jpg" name="recordcheckin" width="250" height="80" border="0" id="recordcheckin" /></a>
+  <a href="CheckinRoom.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('checkinRoom','','../image/djrz1.jpg',1)"><img src="../image/djrz.jpg" name="checkinRoom" width="250" height="80" border="0" id="checkinRoom" /></a>
+  <a href="ChangeRoom.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('changeRoom','','../image/hfgl1.jpg',1)"><img src="../image/hfgl.jpg" name="changeRoom" width="250" height="80" border="0" id="changeRoom" /></a>
+  <a href="CheckoutRoom.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('checkoutRoom','','../image/tfjz1.jpg',1)"><img src="../image/tfjz.jpg" name="checkoutRoom" width="250" height="80" border="0" id="checkoutRoom" /></a>
+  </p>
+  </div>
+  <div id="allroomtable" class="STYLE6">
+    <table width="740"  class="roomtable" height="355" border="1px">
+      <tr>
+	<th width="188" height="55">客房编号</th>
+	<th width="188">房间类型</th>
+	<th width="188">房间楼层</th>
+	<th width="188">房间状态</th>
+</tr>
+<tr>
+	<td>Text 1A</td><td>Text 1B</td><td>Text 1C</td><td>Text 1C</td>
+</tr>
+<tr>
+	<td>Text 2A</td>
+	<td>Text 2B</td><td>Text 2C</td><td>Text 1C</td>
+<tr>
+	<td>Text 3A</td><td>Text 3B</td><td>Text 3C</td><td>Text 1C</td>
+</tr>
+<tr>
+	<td>Text 4A</td><td>Text 4B</td><td>Text 4C</td><td>Text 1C</td>
+</tr>
+<tr>
+	<td>Text 5A</td><td>Text 5B</td><td>Text 5C</td><td>Text 1C</td>
+</tr>
+</table>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- footer -->
+<%@ include file="common/CommonJs.jsp" %>
+<script type="text/JavaScript" src="../js/dist/Calendar.js"></script>
+<script type="text/JavaScript" src="../js/changeRoom.js"></script>
+<script type="text/JavaScript" src="../js/commonCalendar.js"></script>
+</body>
+</html>

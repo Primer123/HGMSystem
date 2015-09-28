@@ -1,0 +1,187 @@
+<%@ page contentType="text/html; charset=gb2312" language="java" import="java.sql.*" errorPage="" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>酒店客房管理系统-用户界面</title>
+<%@ include file="common/CommonAdminHead.jsp" %>
+</head>
+<body onload="MM_preloadImages('image/bg_sub_sidebar_bottom_she_副本.jpg','image/splbgl1.jpg','image/spxxgl1.jpg','image/kflxgl1.jpg','image/kfxxgl1.jpg','image/lcgl1.jpg','image/yhgl1.jpg','image/rzgl1.jpg')">    
+<!-- header -->
+<%@ include file="common/CommonHeader.jsp" %>
+
+<!-- content -->
+<div id="content">
+<div class="maincontent">
+<div class="worklist">
+<div id="alltable">
+  <div id="search">
+    <form id="form1"  class="pull-left" name="form1" method="post" action="">
+      <label for="Submit"></label>
+      <label for="select"></label>
+      <label for="Submit"></label>
+      <span class="STYLE7">
+      <label for="textfield"></label>
+      <input name="textfield" type="text" class="searchtext" id="textfield" size="20" maxlength="30" />
+      </span>
+      <label for="Submit"><span class="message">用户信息关键字</span></label>
+      <span class="message">
+      <input type="button"  class="adminsearch"name="adminsearch" id="adminsearch" value="搜 索" />
+      </span>
+    </form>
+    <input type="button"  class="adminAdd pull-right"name="adminAdd" value="新增" />
+  </div>
+  <div id="worklist">
+    <p class="roommanage"><img src="../image/kfgl.jpg" alt="客房管理" width="200px" height="80px"/><a href="FloorManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('lcgl','','../image/lcgl1.jpg',1)"><img src="../image/lcgl.jpg" alt="楼层管理" name="lcgl" width="200" height="30" border="0" id="lcgl" /></a><a href="RoomTypeManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('roomtypemanage','','../image/kflxgl1.jpg',0)"><img src="../image/kflxgl.jpg" alt="客房类型管理" name="roomtypemanage" width="200" height="30" border="0" id="roomtypemanage" /></a><a href="roomtypemanage.html"></a><a href="RoomManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('roommanage','','../image/kfxxgl1.jpg',1)"><img src="../image/kfxxgl.jpg" alt="客房信息管理" name="roommanage" width="200" height="30" border="0" id="roommanage" /></a><a href="roommanage.html" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('roominformationmanage','','image/../kflxgl1.jpg',1)"></a><a href="roommanage.html"></a></p>
+    <p class="systemmanage"><img src="../image/xtgl.jpg" alt="系统管理" width="200px" height="80px"/><a href="UserManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('yhgl','','../image/yhgl1.jpg',1)"><img src="../image/yhgl.jpg" alt="用户管理" name="yhgl" width="200" height="30" border="0" id="yhgl" /></a><a href="MemberManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('membermanage','','../image/hygl1.jpg',0)"><img src="../image/hygl.jpg" alt="会员管理" name="membermanage" width="200" height="30" border="0" id="membermanage" /></a><a href="membermanage.html" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('usermanage','','../image/hygl1.jpg',1)"></a><a href="membermanage.html"></a><a href="BlogManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('blogmanage','','../image/rzgl1.jpg',1)"><img src="../image/rzgl.jpg" alt="日志管理" name="blogmanage" width="200" height="30" border="0" id="blogmanage" /></a><a href="blogmanage.html"></a></p>
+    <p class="goodmanage"><img src="../image/spgl.jpg" alt="商品管理" width="200px" height="80px"/><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('1','','../image/bg_sub_sidebar_bottom_she_副本.jpg',1)"></a><a href="GoodTypeManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('splbgl','','../image/splbgl1.jpg',1)"><img src="../image/splbgl.jpg" alt="商品类别管理" name="splbgl" width="200" height="30" border="0" id="splbgl" /></a><a href="GoodManage.jsp" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('spxxgl','','../image/spxxgl1.jpg',1)"><img src="../image/spxxgl.jpg" alt="商品信息管理" name="spxxgl" width="200" height="30" border="0" id="spxxgl" /></a></p>
+  </div>
+  <div id="allttable">
+    <table width="740"  class="formtable" height="355" border="1px">
+      <tr>
+	<th width="300"> 会员编号</th>
+	<th width="300">会员名</th>
+	<th width="70">修改</th>
+	<th width="70">删除</th>
+	
+</tr>
+<tr>
+	<td>Text 1A</td><td>Text 1B</td><td>Text 1C</td><td>Text 2A</td>
+</tr>
+<tr>
+	<td>Text 2A</td>
+	<td>Text 2B</td><td>Text 2C</td><td>Text 2A</td>
+<tr>
+	<td>Text 3A</td><td>Text 3B</td><td>Text 3C</td><td>Text 2A</td>
+</tr>
+<tr>
+	<td>Text 4A</td><td>Text 4B</td><td>Text 4C</td><td>Text 2A</td>
+</tr>
+<tr>
+	<td>Text 5A</td><td>Text 5B</td><td>Text 5C</td><td>Text 2A</td>
+</tr>
+</table>
+
+  </div>
+  </div>
+</div>
+</div>
+</div>
+<!--Begin of Add New User Modal  -->
+<div class="modal fade" id="AddUserModal" tabindex="-1" role="dialog" aria-labelledby="AddUserLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">新增用户</h4>
+      </div>
+      <div class="modal-body form-horizontal content">
+  		<div>
+            <form>
+               <div class="form-group">
+				    <label class="col-sm-2 control-label">用户ID</label>
+				    <div class="col-sm-10">
+				    	<input class="form-control" name="id" />
+				    </div>
+			    </div>
+			    <div class="form-group">
+				    <label class="col-sm-2 control-label">职位</label>
+				    <div class="col-sm-10">
+				    	      <select name="position" id="select">
+						        <option>前台</option>
+						        <option>系统管理员</option>
+						        <option>总经理</option>
+						      </select>
+				    </div>
+			    </div>
+			    <div class="form-group">
+				    <label class="col-sm-2 control-label">用户姓名</label>
+				    <div class="col-sm-10">
+				    	<input class="form-control" name="name" />
+				    </div>
+			    </div>
+			     <div class="form-group">
+				    <label class="col-sm-2 control-label">密码</label>
+				    <div class="col-sm-10">
+				    	<input class="form-control" name="password" />
+				    </div>
+			    </div>
+			    <div class="form-group">
+				    <label class="col-sm-2 control-label">备注</label>
+				    <div class="col-sm-10">
+				    	<textarea class="form-control" name="note" rows="3" ></textarea>
+				    </div>
+			    </div>
+    		</form>
+  		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-right">保&nbsp;&nbsp;存</button>
+        <button type="button" class="btn btn-default btn-left" data-dismiss="modal">返&nbsp;&nbsp;回</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<!--End of Add New User Modal  -->
+
+<!--Begin of Update User Modal  -->
+<div class="modal fade" id="UpdateUserModal" tabindex="-1" role="dialog" aria-labelledby="updateUserLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">修改商品信息</h4>
+      </div>
+      <div class="modal-body">
+  		<div id="addtext" class="addtext">
+            <form id="form2" name="form2" method="post" action="">
+	             <div class="form-group">
+				    <label class="col-sm-2 control-label">用户ID</label>
+				    <div class="col-sm-10">
+				    	<input class="form-control" name="id" />
+				    </div>
+			    </div>
+			    <div class="form-group">
+				    <label class="col-sm-2 control-label">职位</label>
+				    <div class="col-sm-10">
+				    	      <select name="position" id="select">
+						        <option>前台</option>
+						        <option>系统管理员</option>
+						        <option>总经理</option>
+						      </select>
+				    </div>
+			    </div>
+			    <div class="form-group">
+				    <label class="col-sm-2 control-label">用户姓名</label>
+				    <div class="col-sm-10">
+				    	<input class="form-control" name="name" />
+				    </div>
+			    </div>
+			    <div class="form-group">
+				    <label class="col-sm-2 control-label">密码</label>
+				    <div class="col-sm-10">
+				    	<input class="form-control" name="password" />
+				    </div>
+			    </div>
+			    <div class="form-group">
+				    <label class="col-sm-2 control-label">备注</label>
+				    <div class="col-sm-10">
+				    	<textarea class="form-control" name="note" rows="3" ></textarea>
+				    </div>
+			    </div>
+    		</form>
+  		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-right">保&nbsp;&nbsp;存</button>
+        <button type="button" class="btn btn-default btn-left" data-dismiss="modal">返&nbsp;&nbsp;回</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<!--End of Update User Modal  -->
+
+<!-- footer -->
+<%@ include file="common/CommonJs.jsp" %>
+<script type="text/JavaScript" src="../js/userManage.js"></script>
+</body>
+</html>

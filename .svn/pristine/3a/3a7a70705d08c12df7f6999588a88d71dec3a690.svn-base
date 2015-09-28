@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+<session-factory>
+<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+<property name="connection.url">jdbc:mysql://localhost:3306/db_hgms</property>
+<property name="connection.username">root</property>
+<property name="connection.password">ilovenju</property>
+<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+<property name="show_sql">true</property>
+<property name="hibernate.connection.autocommit">true</property>
+<property name="hbm2ddl.auto">update</property>
+
+	<!-- 自动把实体类与属性映射成数据库中的表与列 -->
+    <mapping class="entity.CheckinRecord"/>
+    <mapping class="entity.CheckoutRecord"/>
+    <mapping class="entity.ConsumptionRecord"/>
+    <mapping class="entity.CommodityDisc"/>
+    <mapping class="entity.Floor"/>
+    <mapping class="entity.Good"/>
+    <mapping class="entity.GoodType"/>
+    <mapping class="entity.Guest"/>
+    <mapping class="entity.LogFile"/>
+    <mapping class="entity.Member"/>
+    <mapping class="entity.ReservationRecord"/>
+    <mapping class="entity.Room"/>
+    <mapping class="entity.RoomType"/>
+    <mapping class="entity.Staff"/>
+    <mapping class="entity.Wakeup"/>
+        
+</session-factory>
+</hibernate-configuration>

@@ -1,0 +1,647 @@
+package service.impl;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.CheckinRecordDao;
+import dao.CheckoutRecordDao;
+import dao.GuestDao;
+import dao.ReservationRecordDao;
+import dao.RoomDao;
+import dao.RoomTypeDao;
+import entity.CheckinRecord;
+import entity.CheckoutRecord;
+import entity.Guest;
+import entity.ReservationRecord;
+import entity.Room;
+import entity.RoomType;
+import service.ReportsService;
+import sheet.CheckinGuestSheet;
+import sheet.CheckoutGuestSheet;
+import sheet.FinancialSheet;
+import sheet.ReservationGuestSheet;
+
+public class ReportsServiceImpl implements ReportsService {
+	private CheckinRecordDao checkinRecordDao;
+	private CheckoutRecordDao checkoutRecordDao;
+	private ReservationRecordDao reservationRecordDao;
+	private RoomDao roomDao;
+	private RoomTypeDao roomtypeDao;
+	private GuestDao guestDao;		
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByRoomnum(
+			List<String> roomnums) {
+		int i;
+		List<ReservationRecord> templist=new ArrayList<ReservationRecord>();
+		for(i=0;i<roomnums.size();i++){
+			templist.addAll(reservationRecordDao.findByRoomnum(roomnums.get(i)));
+		}		
+		List<ReservationGuestSheet> sheetlist=new ArrayList<ReservationGuestSheet>();
+		for(i=0;i<templist.size();i++){
+			sheetlist.add(convertRsrvEntity(templist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByRoomType(
+			List<String> roomtypes) {
+		int i;
+		List<RoomType> types=new ArrayList<RoomType>();
+		for(i=0;i<roomtypes.size();i++){
+			types.addAll(roomtypeDao.findByTypename(roomtypes.get(i)));
+		}
+		List<Integer> typeids=new ArrayList<Integer>();
+		for(i=0;i<types.size();i++){
+			typeids.add(types.get(i).getId());
+		}
+		List<Room> rooms=new ArrayList<Room>();
+		for(i=0;i<typeids.size();i++){
+			rooms.addAll(roomDao.findByTypeid(typeids.get(i)));
+		}		
+		List<ReservationRecord> rsrvlist=new ArrayList<ReservationRecord>();
+		for(i=0;i<rooms.size();i++){
+			rsrvlist.addAll(reservationRecordDao.findByRoomnum(rooms.get(i).getRoomnum()));
+		}
+		List<ReservationGuestSheet> sheetlist=new ArrayList<ReservationGuestSheet>();
+		for(i=0;i<rsrvlist.size();i++){
+			sheetlist.add(convertRsrvEntity(rsrvlist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByMemberid(
+			List<String> memberid) {
+		int i;
+		List<ReservationRecord> templist=new ArrayList<ReservationRecord>();
+		for(i=0;i<memberid.size();i++){
+			templist.addAll(reservationRecordDao.findByMemberid(memberid.get(i)));
+		}		
+		List<ReservationGuestSheet> sheetlist=new ArrayList<ReservationGuestSheet>();
+		for(i=0;i<templist.size();i++){
+			sheetlist.add(convertRsrvEntity(templist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByArrivingdt(
+			String arrivingdt1, String arrivingdt2) {
+		int i;
+		List<ReservationRecord> templist=reservationRecordDao.findByArrivingdt(arrivingdt1, arrivingdt2);		
+		List<ReservationGuestSheet> sheetlist=new ArrayList<ReservationGuestSheet>();
+		for(i=0;i<templist.size();i++){
+			sheetlist.add(convertRsrvEntity(templist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByDtRNum(String arrivingdt1,
+			String arrivingdt2, List<String> roomnums) {
+		List<ReservationGuestSheet> sheetByDt=getRsrvSheetByArrivingdt(arrivingdt1,arrivingdt2);
+		List<ReservationGuestSheet> sheetByRNum=getRsrvSheetByRoomnum(roomnums);
+		sheetByDt.retainAll(sheetByRNum);
+		return sheetByDt;
+	}
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByDtRType(
+			String arrivingdt1, String arrivingdt2, List<String> roomtypes) {
+		List<ReservationGuestSheet> sheetByDt=getRsrvSheetByArrivingdt(arrivingdt1,arrivingdt2);
+		List<ReservationGuestSheet> sheetByRType=getRsrvSheetByRoomType(roomtypes);
+		sheetByDt.retainAll(sheetByRType);
+		return sheetByDt;
+	}
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByDtMId(String arrivingdt1,
+			String arrivingdt2, List<String> memberid) {
+		List<ReservationGuestSheet> sheetByDt=getRsrvSheetByArrivingdt(arrivingdt1,arrivingdt2);
+		List<ReservationGuestSheet> sheetByMId=getRsrvSheetByMemberid(memberid);
+		sheetByDt.retainAll(sheetByMId);
+		return sheetByDt;
+	}
+
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByRTypeMId(
+			List<String> roomtypes, List<String> memberid) {
+		List<ReservationGuestSheet> sheetByRType=getRsrvSheetByRoomType(roomtypes);
+		List<ReservationGuestSheet> sheetByMId=getRsrvSheetByMemberid(memberid);
+		sheetByRType.retainAll(sheetByMId);
+		return sheetByRType;
+	}
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByRNumMId(
+			List<String> roomnums, List<String> memberid) {
+		List<ReservationGuestSheet> sheetByRNum=getRsrvSheetByRoomnum(roomnums);
+		List<ReservationGuestSheet> sheetByMId=getRsrvSheetByMemberid(memberid);
+		sheetByRNum.retainAll(sheetByMId);
+		return sheetByRNum;
+	}
+
+	@Override
+	public List<ReservationGuestSheet> getRsrvSheetByDtRTypeMId(
+			String arrivingdt1, String arrivingdt2, List<String> roomtypes,
+			List<String> memberid) {
+		List<ReservationGuestSheet> sheetByDt=getRsrvSheetByArrivingdt(arrivingdt1,arrivingdt2);
+		List<ReservationGuestSheet> sheetByRType=getRsrvSheetByRoomType(roomtypes);
+		List<ReservationGuestSheet> sheetByMId=getRsrvSheetByMemberid(memberid);
+		sheetByDt.retainAll(sheetByRType);
+		sheetByDt.retainAll(sheetByMId);
+		return sheetByDt;
+	}
+	
+	@Override
+	public void printRsrvSheet(List<ReservationGuestSheet> reservationGuestSheet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByRoomnum(
+			List<String> roomnums) {
+		int i;
+		List<CheckinRecord> templist=new ArrayList<CheckinRecord>();
+		for(i=0;i<roomnums.size();i++){
+			templist.addAll(checkinRecordDao.findByRoomNum(roomnums.get(i)));
+		}		
+		List<CheckinGuestSheet> sheetlist=new ArrayList<CheckinGuestSheet>();
+		for(i=0;i<templist.size();i++){
+			sheetlist.add(convertCheckinEntity(templist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByRoomType(
+			List<String> roomtypes) {
+		int i;
+		List<RoomType> types=new ArrayList<RoomType>();
+		for(i=0;i<roomtypes.size();i++){
+			types.addAll(roomtypeDao.findByTypename(roomtypes.get(i)));
+		}
+		List<Integer> typeids=new ArrayList<Integer>();
+		for(i=0;i<types.size();i++){
+			typeids.add(types.get(i).getId());
+		}
+		List<Room> rooms=new ArrayList<Room>();
+		for(i=0;i<typeids.size();i++){
+			rooms.addAll(roomDao.findByTypeid(typeids.get(i)));
+		}		
+		List<CheckinRecord> checkinlist=new ArrayList<CheckinRecord>();
+		for(i=0;i<rooms.size();i++){
+			checkinlist.addAll(checkinRecordDao.findByRoomNum(rooms.get(i).getRoomnum()));
+		}
+		List<CheckinGuestSheet> sheetlist=new ArrayList<CheckinGuestSheet>();
+		for(i=0;i<checkinlist.size();i++){
+			sheetlist.add(convertCheckinEntity(checkinlist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByMemberid(
+			List<String> memberid) {
+		int i;
+		List<CheckinRecord> templist=new ArrayList<CheckinRecord>();
+		for(i=0;i<memberid.size();i++){
+			templist.addAll(checkinRecordDao.findByMemberId(memberid.get(i)));
+		}		
+		List<CheckinGuestSheet> sheetlist=new ArrayList<CheckinGuestSheet>();
+		for(i=0;i<templist.size();i++){
+			sheetlist.add(convertCheckinEntity(templist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByArrivingdt(
+			String arrivingdt1, String arrivingdt2) {
+		int i;
+		List<CheckinRecord> templist=checkinRecordDao.findByArrivingDT(arrivingdt1, arrivingdt2);	
+		List<CheckinGuestSheet> sheetlist=new ArrayList<CheckinGuestSheet>();
+		for(i=0;i<templist.size();i++){
+			sheetlist.add(convertCheckinEntity(templist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByDtRNum(String arrivingdt1,
+			String arrivingdt2, List<String> roomnums) {
+		List<CheckinGuestSheet> sheetByDt=getCheckinSheetByArrivingdt(arrivingdt1,arrivingdt2);
+		List<CheckinGuestSheet> sheetByRNum=getCheckinSheetByRoomnum(roomnums);
+		sheetByDt.retainAll(sheetByRNum);
+		return sheetByDt;
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByDtRType(String arrivingdt1,
+			String arrivingdt2, List<String> roomtypes) {
+		List<CheckinGuestSheet> sheetByDt=getCheckinSheetByArrivingdt(arrivingdt1,arrivingdt2);
+		List<CheckinGuestSheet> sheetByRType=getCheckinSheetByRoomnum(roomtypes);
+		sheetByDt.retainAll(sheetByRType);
+		return sheetByDt;
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByDtMId(String arrivingdt1,
+			String arrivingdt2, List<String> memberid) {
+		List<CheckinGuestSheet> sheetByDt=getCheckinSheetByArrivingdt(arrivingdt1,arrivingdt2);
+		List<CheckinGuestSheet> sheetByMId=getCheckinSheetByMemberid(memberid);
+		sheetByDt.retainAll(sheetByMId);
+		return sheetByDt;
+	}	
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByRTypeMId(
+			List<String> roomtypes, List<String> memberid) {
+		List<CheckinGuestSheet> sheetByRType=getCheckinSheetByRoomType(roomtypes);
+		List<CheckinGuestSheet> sheetByMId=getCheckinSheetByMemberid(memberid);
+		sheetByRType.retainAll(sheetByMId);
+		return sheetByRType;
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByRNumMId(
+			List<String> roomnums, List<String> memberid) {
+		List<CheckinGuestSheet> sheetByRNum=getCheckinSheetByRoomType(roomnums);
+		List<CheckinGuestSheet> sheetByMId=getCheckinSheetByMemberid(memberid);
+		sheetByRNum.retainAll(sheetByMId);
+		return sheetByRNum;
+	}
+
+	@Override
+	public List<CheckinGuestSheet> getCheckinSheetByDtRTypeMId(
+			String arrivingdt1, String arrivingdt2, List<String> roomtypes,
+			List<String> memberid) {
+		List<CheckinGuestSheet> sheetByDt=getCheckinSheetByArrivingdt(arrivingdt1,arrivingdt2);
+		List<CheckinGuestSheet> sheetByRType=getCheckinSheetByRoomType(roomtypes);
+		List<CheckinGuestSheet> sheetByMId=getCheckinSheetByMemberid(memberid);
+		sheetByDt.retainAll(sheetByRType);
+		sheetByDt.retainAll(sheetByMId);
+		return sheetByDt;
+	}
+
+	@Override
+	public void printCheckinSheet(List<CheckinGuestSheet> checkinGuestSheet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByRoomnum(
+			List<String> roomnums) {
+		int i;
+		List<CheckoutRecord> templist=new ArrayList<CheckoutRecord>();
+		for(i=0;i<roomnums.size();i++){
+			templist.addAll(checkoutRecordDao.findByRoomNum(roomnums.get(i)));
+		}		
+		List<CheckoutGuestSheet> sheetlist=new ArrayList<CheckoutGuestSheet>();
+		for(i=0;i<templist.size();i++){
+			sheetlist.add(convertCheckoutEntity(templist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByRoomType(
+			List<String> roomtypes) {
+		int i;
+		List<RoomType> types=new ArrayList<RoomType>();
+		for(i=0;i<roomtypes.size();i++){
+			types.addAll(roomtypeDao.findByTypename(roomtypes.get(i)));
+		}
+		List<Integer> typeids=new ArrayList<Integer>();
+		for(i=0;i<types.size();i++){
+			typeids.add(types.get(i).getId());
+		}
+		List<Room> rooms=new ArrayList<Room>();
+		for(i=0;i<typeids.size();i++){
+			rooms.addAll(roomDao.findByTypeid(typeids.get(i)));
+		}		
+		List<CheckoutRecord> checkoutlist=new ArrayList<CheckoutRecord>();
+		for(i=0;i<rooms.size();i++){
+			checkoutlist.addAll(checkoutRecordDao.findByRoomNum(rooms.get(i).getRoomnum()));
+		}
+		List<CheckoutGuestSheet> sheetlist=new ArrayList<CheckoutGuestSheet>();
+		for(i=0;i<checkoutlist.size();i++){
+			sheetlist.add(convertCheckoutEntity(checkoutlist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByMemberid(
+			List<String> memberid) {
+		int i;
+		List<CheckinRecord> checkinlist=new ArrayList<CheckinRecord>();
+		for(i=0;i<memberid.size();i++){
+			checkinlist.addAll(checkinRecordDao.findByMemberId(memberid.get(i)));
+		}
+		List<CheckoutRecord> checkoutlist=new ArrayList<CheckoutRecord>();
+		for(i=0;i<checkinlist.size();i++){
+			checkoutlist.add(checkoutRecordDao.findByCRNum(checkinlist.get(i).getCheckinnum(), checkinlist.get(i).getRoomnum()));
+		}
+		List<CheckoutGuestSheet> sheetlist=new ArrayList<CheckoutGuestSheet>();
+		for(i=0;i<checkoutlist.size();i++){
+			sheetlist.add(convertCheckoutEntity(checkoutlist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByDeparturedt(
+			String departuredt1, String departuredt2) {
+		int i;
+		List<CheckoutRecord> templist=checkoutRecordDao.findByCheckoutDt(departuredt1, departuredt2);	
+		List<CheckoutGuestSheet> sheetlist=new ArrayList<CheckoutGuestSheet>();
+		for(i=0;i<templist.size();i++){
+			sheetlist.add(convertCheckoutEntity(templist.get(i)));
+		}
+		return sheetlist;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByDtRNum(
+			String departuredt1, String departuredt2, List<String> roomnums) {
+		List<CheckoutGuestSheet> sheetByDt=getCheckoutSheetByDeparturedt(departuredt1,departuredt2); 
+		List<CheckoutGuestSheet> sheetByRNum=getCheckoutSheetByRoomnum(roomnums);
+		sheetByDt.retainAll(sheetByRNum);
+		return sheetByDt;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByDtRType(
+			String departuredt1, String departuredt2, List<String> roomtypes) {
+		List<CheckoutGuestSheet> sheetByDt=getCheckoutSheetByDeparturedt(departuredt1,departuredt2); 
+		List<CheckoutGuestSheet> sheetByRType=getCheckoutSheetByRoomType(roomtypes);
+		sheetByDt.retainAll(sheetByRType);
+		return sheetByDt;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByDtMId(
+			String departuredt1, String departuredt2, List<String> memberid) {
+		List<CheckoutGuestSheet> sheetByDt=getCheckoutSheetByDeparturedt(departuredt1,departuredt2); 
+		List<CheckoutGuestSheet> sheetByMId=getCheckoutSheetByMemberid(memberid);
+		sheetByDt.retainAll(sheetByMId);
+		return sheetByDt;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByRTypeMId(
+			List<String> roomtypes, List<String> memberid) {
+		List<CheckoutGuestSheet> sheetByRType=getCheckoutSheetByRoomType(roomtypes);
+		List<CheckoutGuestSheet> sheetByMId=getCheckoutSheetByMemberid(memberid);
+		sheetByRType.retainAll(sheetByMId);
+		return sheetByRType;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByRNumMId(
+			List<String> roomnums, List<String> memberid) {
+		List<CheckoutGuestSheet> sheetByRNum=getCheckoutSheetByRoomnum(roomnums);
+		List<CheckoutGuestSheet> sheetByMId=getCheckoutSheetByMemberid(memberid);
+		sheetByRNum.retainAll(sheetByMId);
+		return sheetByRNum;
+	}
+
+	@Override
+	public List<CheckoutGuestSheet> getCheckoutSheetByDtRTypeMId(
+			String departuredt1, String departuredt2, List<String> roomtypes,
+			List<String> memberid) {
+		List<CheckoutGuestSheet> sheetByDt=getCheckoutSheetByDeparturedt(departuredt1,departuredt2);
+		List<CheckoutGuestSheet> sheetByRType=getCheckoutSheetByRoomType(roomtypes);
+		List<CheckoutGuestSheet> sheetByMId=getCheckoutSheetByMemberid(memberid);
+		sheetByDt.retainAll(sheetByRType);
+		sheetByDt.retainAll(sheetByMId);
+		return sheetByDt;
+	}
+	
+	@Override
+	public void printCheckoutSheet(List<CheckoutGuestSheet> checkoutGuestSheet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<FinancialSheet> getFinancialSheetByMemberid(
+			List<String> memberid) {
+		List<CheckinRecord> checkinlist=new ArrayList<CheckinRecord>();
+		List<CheckoutRecord> checkoutlist=new ArrayList<CheckoutRecord>();
+		List<FinancialSheet> sheet=new ArrayList<FinancialSheet>();
+		int i;
+		for(i=0;i<memberid.size();i++){
+			checkinlist.addAll(checkinRecordDao.findByMemberId(memberid.get(i)));
+		}
+		for(i=0;i<checkinlist.size();i++){
+			checkoutlist.add(checkoutRecordDao.findByCRNum(
+					checkinlist.get(i).getCheckinnum(), checkinlist.get(i).getRoomnum()));
+		}
+		for(i=0;i<checkinlist.size();i++){
+			sheet.add(convertCinToFin(checkinlist.get(i)));
+		}
+		for(i=0;i<checkoutlist.size();i++){
+			sheet.add(convertCoutToFin(checkoutlist.get(i)));
+		}
+		return sheet;
+	}
+
+	@Override
+	public List<FinancialSheet> getFinancialSheetByDate(String startdt,
+			String enddt, int paymeth, String fnctype) {
+		List<FinancialSheet> sheet=new ArrayList<FinancialSheet>();
+		if(fnctype.equals("押金")){
+			List<CheckinRecord> checkinByDt=checkinRecordDao.findByArrivingDT(startdt, enddt);
+			if(paymeth==0||paymeth==1){
+				int i;
+				for(i=0;i<checkinByDt.size();i++){
+					if(checkinByDt.get(i).getPaymeth()==paymeth){
+						sheet.add(convertCinToFin(checkinByDt.get(i)));
+					}					
+				}
+			}
+			else{
+				int i;
+				for(i=0;i<checkinByDt.size();i++){
+					sheet.add(convertCinToFin(checkinByDt.get(i)));
+				}
+			}
+		}
+		else if(fnctype.equals("结账")){
+			List<CheckoutRecord> checkoutByDt=checkoutRecordDao.findByCheckoutDt(startdt, enddt);
+            if(paymeth==0||paymeth==1){
+            	int i;
+				for(i=0;i<checkoutByDt.size();i++){
+					if(checkoutByDt.get(i).getPaymeth()==paymeth){
+						sheet.add(convertCoutToFin(checkoutByDt.get(i)));
+					}					
+				}
+			}
+			else{
+				int i;
+				for(i=0;i<checkoutByDt.size();i++){
+					sheet.add(convertCoutToFin(checkoutByDt.get(i)));				
+				}
+			}
+		}
+		else{
+			List<CheckinRecord> checkinByDt=checkinRecordDao.findByArrivingDT(startdt, enddt);
+			List<CheckoutRecord> checkoutByDt=checkoutRecordDao.findByCheckoutDt(startdt, enddt);
+			if(paymeth==0||paymeth==1){
+				int i;
+				for(i=0;i<checkinByDt.size();i++){
+					if(checkinByDt.get(i).getPaymeth()==paymeth){
+						sheet.add(convertCinToFin(checkinByDt.get(i)));
+					}					
+				}
+				for(i=0;i<checkoutByDt.size();i++){
+					if(checkoutByDt.get(i).getPaymeth()==paymeth){
+						sheet.add(convertCoutToFin(checkoutByDt.get(i)));
+					}					
+				}
+			}
+			else{
+				int i;
+				for(i=0;i<checkinByDt.size();i++){
+					sheet.add(convertCinToFin(checkinByDt.get(i)));
+				}
+				for(i=0;i<checkoutByDt.size();i++){
+					sheet.add(convertCoutToFin(checkoutByDt.get(i)));				
+				}
+			}
+		}		
+		return sheet;
+	}
+
+	@Override
+	public void printFinancialSheet(List<FinancialSheet> financialSheet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private ReservationGuestSheet convertRsrvEntity(ReservationRecord entity){
+		ReservationGuestSheet sheet=new ReservationGuestSheet();
+		sheet.setRsrvnum(entity.getRsrvnum());
+		sheet.setRoomnum(entity.getRoomnum());
+		Room room=roomDao.findByRoomnum(entity.getRoomnum());
+		sheet.setRoomtype(roomtypeDao.findById(room.getTypeid()).getTypename());
+		sheet.setName(entity.getName());
+		sheet.setMemberid(entity.getMemberid());
+		sheet.setArrivingdt(entity.getArrivingdt());
+		sheet.setDeparturedt(entity.getDeparturedt());
+		sheet.setTelnum(entity.getTelnum());
+		return sheet;
+	}
+	
+	private CheckinGuestSheet convertCheckinEntity(CheckinRecord entity){
+		CheckinGuestSheet sheet=new CheckinGuestSheet();
+		sheet.setCheckinnum(entity.getCheckinnum());
+		sheet.setRoomnum(entity.getRoomnum());
+		Room room=roomDao.findByRoomnum(entity.getRoomnum());
+		sheet.setRoomtype(roomtypeDao.findById(room.getTypeid()).getTypename());
+		Guest guest=guestDao.findByCRNum(entity.getCheckinnum(), entity.getRoomnum());
+		sheet.setName(guest.getName());
+		sheet.setMemberid(entity.getMemberid());
+		sheet.setArrivingdt(entity.getArrivingdt());
+		sheet.setDeparturedt(entity.getDeparturedt());
+		sheet.setTelnum(guest.getTelnum());
+		return sheet;
+	}
+	
+	private CheckoutGuestSheet convertCheckoutEntity(CheckoutRecord entity){
+		CheckoutGuestSheet sheet=new CheckoutGuestSheet();
+		sheet.setCheckinnum(entity.getCheckinnum());
+		sheet.setRoomnum(entity.getRoomnum());
+		Room room=roomDao.findByRoomnum(entity.getRoomnum());
+		sheet.setRoomtype(roomtypeDao.findById(room.getTypeid()).getTypename());
+		Guest guest=guestDao.findByCRNum(entity.getCheckinnum(), entity.getRoomnum());
+		sheet.setName(guest.getName());
+		sheet.setMemberid(checkinRecordDao.findByCRNum(entity.getCheckinnum(), entity.getRoomnum()).getMemberid());
+		SimpleDateFormat formatter=new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+		String arrivingdt=entity.getCheckindt();
+		String departuredt=entity.getCheckoutdt();
+		sheet.setArrivingdt(formatter.format(arrivingdt));
+		sheet.setDeparturedt(formatter.format(departuredt));
+		sheet.setTelnum(guest.getTelnum());
+		return sheet;
+	}
+	
+	private FinancialSheet convertCinToFin(CheckinRecord entity){
+		FinancialSheet sheet=new FinancialSheet();
+		sheet.setCheckinnum(entity.getCheckinnum());
+		sheet.setRoomnum(entity.getRoomnum());
+		Room room=roomDao.findByRoomnum(entity.getRoomnum());
+		sheet.setRoomtype(roomtypeDao.findById(room.getTypeid()).getTypename());
+		Guest guest=guestDao.findByCRNum(entity.getCheckinnum(), entity.getRoomnum());
+		sheet.setName(guest.getName());
+		sheet.setMemberid(entity.getMemberid());
+		sheet.setSum(entity.getDeposit());
+		if(entity.getPaymeth()==0)
+			sheet.setPaymeth("现金");
+		else
+			sheet.setPaymeth("刷卡");
+		sheet.setFnctype("押金");
+		sheet.setFncdt(entity.getArrivingdt());
+    	return sheet;
+	}
+	
+    private FinancialSheet convertCoutToFin(CheckoutRecord entity){
+    	FinancialSheet sheet=new FinancialSheet();
+    	sheet.setCheckinnum(entity.getCheckinnum());
+		sheet.setRoomnum(entity.getRoomnum());
+		Room room=roomDao.findByRoomnum(entity.getRoomnum());
+		sheet.setRoomtype(roomtypeDao.findById(room.getTypeid()).getTypename());
+		Guest guest=guestDao.findByCRNum(entity.getCheckinnum(), entity.getRoomnum());
+		sheet.setName(guest.getName());
+		sheet.setMemberid(checkinRecordDao.findByCRNum(entity.getCheckinnum(), entity.getRoomnum()).getMemberid());
+		sheet.setSum(entity.getAr());
+		if(entity.getPaymeth()==0)
+			sheet.setPaymeth("现金");
+		else
+			sheet.setPaymeth("刷卡");
+		sheet.setFnctype("结账");
+		SimpleDateFormat formatter=new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+		String departuredt=entity.getCheckoutdt();
+		sheet.setFncdt(formatter.format(departuredt));
+    	return sheet;
+	}
+
+	public CheckinRecordDao getCheckinRecordDao() {
+		return checkinRecordDao;
+	}
+	public void setCheckinRecordDao(CheckinRecordDao checkinRecordDao) {
+		this.checkinRecordDao = checkinRecordDao;
+	}
+	public CheckoutRecordDao getCheckoutRecordDao() {
+		return checkoutRecordDao;
+	}
+	public void setCheckoutRecordDao(CheckoutRecordDao checkoutRecordDao) {
+		this.checkoutRecordDao = checkoutRecordDao;
+	}
+	public ReservationRecordDao getReservationRecordDao() {
+		return reservationRecordDao;
+	}
+	public void setReservationRecordDao(ReservationRecordDao reservationRecordDao) {
+		this.reservationRecordDao = reservationRecordDao;
+	}
+	public RoomDao getRoomDao() {
+		return roomDao;
+	}
+	public void setRoomDao(RoomDao roomDao) {
+		this.roomDao = roomDao;
+	}
+	public GuestDao getGuestDao() {
+		return guestDao;
+	}
+	public void setGuestDao(GuestDao guestDao) {
+		this.guestDao = guestDao;
+	}	
+}

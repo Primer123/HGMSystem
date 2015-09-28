@@ -1,0 +1,82 @@
+package service.impl;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class RoomTypeServiceImplTest {
+
+	ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
+			"applicationContext.xml");
+	RoomTypeService roomtypeService = (RoomTypeService) ctx.getBean("RoomTypeService");
+	
+	@Test
+	public void testGetTargetRoomTypeMap() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testGetTargetRoomTypeInt() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testGetRoomTypeList() {
+		List<RoomTypeInfo> list=roomtypeService.getRoomTypeList();
+		assertEquals(list.get(1).getId(),2);
+	}
+	
+	@Test
+	public void testAddNewRoomType() {
+		RoomTypeInfo info=new RoomTypeInfo();
+		info.setTypename("超豪华客房");
+		info.setNumofadult(2);
+		info.setNumofkid(1);
+		info.setBedtype(2);
+		info.setStdprice(1000);
+		info.setDiscprice(1000);
+		info.setRmprice(1000);
+		info.setVmprice(1000);
+		roomtypeService.addNewRoomType(info);
+	}
+	
+	@Test
+	public void testModifyRoomTypeInfo() {
+		RoomTypeInfo info=new RoomTypeInfo();
+		info.setId(15);
+		info.setTypename("超豪华客房");
+		info.setNumofadult(2);
+		info.setNumofkid(1);
+		info.setBedtype(2);
+		info.setStdprice(1000);
+		info.setDiscprice(1000);
+		info.setRmprice(1000);
+		info.setVmprice(999);
+		roomtypeService.modifyRoomTypeinfo(info);		
+	}
+	
+	@Test
+	public void testDeleteRoomType1() {
+		RoomTypeInfo info=new RoomTypeInfo();
+		info.setId(15);
+		info.setTypename("超豪华客房");
+		info.setNumofadult(2);
+		info.setNumofkid(1);
+		info.setBedtype(2);
+		info.setStdprice(1000);
+		info.setDiscprice(1000);
+		info.setRmprice(1000);
+		info.setVmprice(999);
+		assertEquals(roomtypeService.deleteRoomTypeinfo(info),true);		
+	}
+	
+	@Test
+	public void testDeleteRoomType2() {
+		RoomTypeInfo info=new RoomTypeInfo();
+		info.setId(1);
+		assertEquals(roomtypeService.deleteRoomTypeinfo(info),false);		
+	}
+	
+	
+
+}

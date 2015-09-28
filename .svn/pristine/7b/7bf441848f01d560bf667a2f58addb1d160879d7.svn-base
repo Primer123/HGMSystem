@@ -1,0 +1,125 @@
+package service;
+
+import java.util.List;
+
+import sheet.*;
+
+public interface ReportsService {
+
+	/*
+	 * 生成并打印预定客人报表
+	 */
+	public List<ReservationGuestSheet> getRsrvSheetByRoomnum(
+			List<String> roomnums);
+
+	public List<ReservationGuestSheet> getRsrvSheetByRoomType(
+			List<String> roomtypes);
+
+	public List<ReservationGuestSheet> getRsrvSheetByMemberid(
+			List<String> memberid);
+	
+	public List<ReservationGuestSheet> getRsrvSheetByArrivingdt(
+			String arrivingdt1, String arrivingdt2);
+	
+	public List<ReservationGuestSheet> getRsrvSheetByDtRNum(
+			String arrivingdt1,String arrivingdt2,List<String> roomnums);
+	
+	public List<ReservationGuestSheet> getRsrvSheetByDtRType(
+			String arrivingdt1,String arrivingdt2,List<String> roomtypes);
+	
+	public List<ReservationGuestSheet> getRsrvSheetByDtMId(
+			String arrivingdt1,String arrivingdt2,List<String> memberid);
+	
+	public List<ReservationGuestSheet> getRsrvSheetByRTypeMId(
+			List<String> roomtypes,List<String> memberid);
+	
+	public List<ReservationGuestSheet> getRsrvSheetByRNumMId(
+			List<String> roomnums,List<String> memberid);
+	
+	public List<ReservationGuestSheet> getRsrvSheetByDtRTypeMId(
+			String arrivingdt1,String arrivingdt2,List<String> roomtypes,List<String> memberid);
+
+	public void printRsrvSheet(List<ReservationGuestSheet> reservationGuestSheet);
+
+	/*
+	 * 生成并打印入住客人报表
+	 */
+	public List<CheckinGuestSheet> getCheckinSheetByRoomnum(
+			List<String> roomnums);
+
+	public List<CheckinGuestSheet> getCheckinSheetByRoomType(
+			List<String> roomtypes);
+
+	public List<CheckinGuestSheet> getCheckinSheetByMemberid(
+			List<String> memberid);
+	
+	public List<CheckinGuestSheet> getCheckinSheetByArrivingdt(
+			String arrivingdt1, String arrivingdt2);
+	
+	public List<CheckinGuestSheet> getCheckinSheetByDtRNum(
+			String arrivingdt1,String arrivingdt2,List<String> roomnums);
+	
+	public List<CheckinGuestSheet> getCheckinSheetByDtRType(
+			String arrivingdt1,String arrivingdt2,List<String> roomtypes);
+	
+	public List<CheckinGuestSheet> getCheckinSheetByDtMId(
+			String arrivingdt1,String arrivingdt2,List<String> memberid);
+	
+	public List<CheckinGuestSheet> getCheckinSheetByRTypeMId(
+			List<String> roomtypes,List<String> memberid);
+	
+	public List<CheckinGuestSheet> getCheckinSheetByRNumMId(
+			List<String> roomnums,List<String> memberid);
+	
+	public List<CheckinGuestSheet> getCheckinSheetByDtRTypeMId(
+			String arrivingdt1,String arrivingdt2,List<String> roomtypes,List<String> memberid);
+
+	public void printCheckinSheet(List<CheckinGuestSheet> checkinGuestSheet);
+
+	/*
+	 * 生成并打印离店客人报表
+	 */
+	public List<CheckoutGuestSheet> getCheckoutSheetByRoomnum(
+			List<String> roomnums);
+
+	public List<CheckoutGuestSheet> getCheckoutSheetByRoomType(
+			List<String> roomtypes);
+
+	public List<CheckoutGuestSheet> getCheckoutSheetByMemberid(
+			List<String> memberid);
+	
+	public List<CheckoutGuestSheet> getCheckoutSheetByDeparturedt(
+			String departuredt1, String departuredt2);
+	
+	public List<CheckoutGuestSheet> getCheckoutSheetByDtRNum(
+			String departuredt1, String departuredt2,List<String> roomnums);
+	
+	public List<CheckoutGuestSheet> getCheckoutSheetByDtRType(
+			String departuredt1, String departuredt2,List<String> roomtypes);
+	
+	public List<CheckoutGuestSheet> getCheckoutSheetByDtMId(
+			String departuredt1, String departuredt2,List<String> memberid);
+	
+	public List<CheckoutGuestSheet> getCheckoutSheetByRTypeMId(
+			List<String> roomtypes,List<String> memberid);
+	
+	public List<CheckoutGuestSheet> getCheckoutSheetByRNumMId(
+			List<String> roomnums,List<String> memberid);
+	
+	public List<CheckoutGuestSheet> getCheckoutSheetByDtRTypeMId(
+			String departuredt1, String departuredt2,List<String> roomtypes,List<String> memberid);
+
+	public void printCheckoutSheet(List<CheckoutGuestSheet> checkoutGuestSheet);
+
+	/*
+	 * 生成并打印财务进账报表
+	 */
+	public List<FinancialSheet> getFinancialSheetByMemberid(
+			List<String> memberid);
+
+	public List<FinancialSheet> getFinancialSheetByDate(String startdt,
+			String enddt, int paymeth, String fnctype);
+	
+	public void printFinancialSheet(List<FinancialSheet> financialSheet);
+
+}

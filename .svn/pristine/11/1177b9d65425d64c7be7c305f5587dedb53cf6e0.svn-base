@@ -1,0 +1,346 @@
+package service.impl;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import jxl.write.WriteException;
+import model.CheckinInfo;
+import model.ReservationInfo;
+import dao.CheckinRecordDao;
+import dao.GuestDao;
+import dao.LogFileDao;
+import dao.MemberDao;
+import dao.ReservationRecordDao;
+import dao.RoomDao;
+import dao.RoomTypeDao;
+import dao.StaffDao;
+import entity.CheckinRecord;
+import entity.Guest;
+import entity.LogFile;
+import entity.Member;
+import entity.Room;
+import entity.RoomType;
+import entity.Staff;
+import service.CheckinService;
+import util.ExcelOperation;
+
+public class CheckinServiceImpl implements CheckinService {
+	private CheckinRecordDao checkinRecordDao;
+	private ReservationRecordDao reservationRecordDao;
+	private RoomDao roomDao;
+	private RoomTypeDao roomTypeDao;
+	private GuestDao guestDao;
+	private MemberDao memberDao;
+	private LogFileDao logFileDao;
+	private StaffDao staffDao;
+
+	@Override
+	public String newCheckinnum() {
+		Date now = new Date();
+		SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+		String today = dateFormat1.format(now);
+		String[] todayList = today.split("-");
+		String todaystr = todayList[0] + todayList[1] + todayList[2];
+		
+		String today1 = dateFormat1.format(now) + " 00:00:00";
+		String today2 = dateFormat2.format(now);
+		List<CheckinRecord> todayinlist = checkinRecordDao.findByArrivingDT(
+				today1, today2);
+		
+		int account = 1;
+		if(todayinlist != null) {
+			account = todayinlist.size() + 1;
+		}
+		 
+		String checkinnum = todaystr;
+		if (account < 10) {
+			checkinnum += "00" + account;
+		} else if (account < 100 && account >= 10) {
+			checkinnum += "0" + account;
+		} else {
+			checkinnum += +account;
+		}
+
+		return checkinnum;
+	}
+	
+	@Override
+	public CheckinInfo checkin(CheckinInfo checkinInfo, String staffid) {
+		// TODO Auto-generated method stub
+		String roomnum = checkinInfo.getRoomnum();
+		RoomType roomType = getRoomType(roomnum);
+		String typename = roomType.getTypename();
+		double stdprice = roomType.getStdprice();
+		double discprice = roomType.getDiscprice();
+		String staffname = getStaffName(staffid);
+		String memberid = checkinInfo.getMemberid();
+		double mprice = getMprice(roomType, memberid);
+		
+		Date now = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+		String arrivingdt = dateFormat.format(now);
+		checkinInfo.setArrivingdt(arrivingdt);
+		
+		String departuredt = checkinInfo.getDeparturedt() + " 13:00:00";
+		checkinInfo.setDeparturedt(departuredt);
+
+		checkinInfo.setTypename(typename);
+		checkinInfo.setStdprice(stdprice);
+		checkinInfo.setDiscprice(discprice);
+		checkinInfo.setStaffname(staffname);
+		checkinInfo.setMprice(mprice);
+
+		return checkinInfo;
+	}
+
+	@Override
+	public List<CheckinInfo> checkin(List<ReservationInfo> reservationInfos) {
+		// TODO Auto-generated method stub
+		List<CheckinInfo> checkinInfos = new ArrayList<CheckinInfo>();
+		
+		int size = reservationInfos.size();
+		for(int i = 0; i < size; i++) {
+			ReservationInfo reservationInfo = reservationInfos.get(i);
+			String roomnum = reservationInfo.getRoomnum();
+			String typename = reservationInfo.getTypename();
+			double stdprice = reservationInfo.getStdprice();
+			double discprice = reservationInfo.getDiscprice();
+			String arrivingdt = reservationInfo.getArrivingdt();
+			String departuredt = reservationInfo.getDeparturedt();
+			int numOfGuest = reservationInfo.getNumOfGuest();
+			String memberid = reservationInfo.getMemberid();
+			double mprice = reservationInfo.getMprice();
+			
+			CheckinInfo checkinInfo = new CheckinInfo();
+			checkinInfo.setRoomnum(roomnum);
+			checkinInfo.setTypename(typename);
+			checkinInfo.setStdprice(stdprice);
+			checkinInfo.setDiscprice(discprice);
+			checkinInfo.setArrivingdt(arrivingdt);
+			checkinInfo.setDeparturedt(departuredt);
+			checkinInfo.setNumOfGuest(numOfGuest);
+			checkinInfo.setMemberid(memberid);
+			checkinInfo.setMprice(mprice);
+			
+			checkinInfos.add(checkinInfo);
+		}
+		
+		return checkinInfos;
+	}
+
+	@Override
+	public void saveCheckinRecord(CheckinInfo checkinInfo, List<Guest> guests,
+			String staffid) {
+		// TODO Auto-generated method stub
+		CheckinRecord checkinRecord = transferModelToEntity(checkinInfo,
+				staffid);
+		checkinRecord.setStaffid(staffid);
+		checkinRecordDao.create(checkinRecord);
+
+		int size = guests.size();
+		for (int i = 0; i < size; i++) {
+			Guest guest = guests.get(i);
+			guestDao.create(guest);
+		}
+
+		String roomnum = checkinInfo.getRoomnum();
+		Room room = roomDao.findByRoomnum(roomnum);
+		room.setRoomstate(2);
+		roomDao.modify(room);
+
+		newLogFile(staffid, "入住", checkinInfo.getCheckinnum(),
+				checkinInfo.getRoomnum());
+	}
+
+	@Override
+	public void printCheckinBill(OutputStream os, CheckinInfo checkinInfo,
+			List<Guest> guests) {
+		// TODO Auto-generated method stub
+		Map<String, Object> content = new HashMap<String, Object>();
+		content.put("chekinnum", checkinInfo.getCheckinnum());
+		content.put("roomnum", checkinInfo.getRoomnum());
+		content.put("typename", checkinInfo.getTypename());
+		content.put("stdprice", "￥" + checkinInfo.getStdprice());
+		content.put("discprice", "￥" + checkinInfo.getDiscprice());
+		content.put("deposit", "￥" + checkinInfo.getDeposit());
+
+		int size = guests.size();
+		for (int i = 0; i < size; i++) {
+			Guest guest = guests.get(i);
+			content.put("" + i, guest);
+		}
+
+		content.put("checkindt", checkinInfo.getArrivingdt());
+		content.put("checkoutdt", checkinInfo.getDeparturedt());
+		content.put("numofguests", size + "人");
+		content.put("staffname", checkinInfo.getStaffname());
+		content.put("memberid", checkinInfo.getMemberid());
+		content.put("mprice", "￥" + checkinInfo.getMprice());
+		content.put("breakfast", checkinInfo.getBreakfast() + "份");
+		content.put("remarks", checkinInfo.getRemarks());
+
+		try {
+			ExcelOperation.createExcel(os, "入住登记", content);
+		} catch (WriteException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void newLogFile(String staffid, String operation,
+			String checkinnum, String roomnum) {
+		LogFile logFile = new LogFile();
+		logFile.setStaffid(staffid);
+		logFile.setOperation(operation);
+
+		Date now = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+		String datetime = dateFormat.format(now);
+		logFile.setDatetime(datetime);
+		logFile.setRemarks("入住单号/房间号:" + checkinnum + "/" + roomnum);
+		logFileDao.create(logFile);
+	}
+
+	private CheckinRecord transferModelToEntity(CheckinInfo checkinInfo,
+			String staffid) {
+		int id = checkinInfo.getId();
+		String checkinnum = checkinInfo.getCheckinnum();
+		String roomnum = checkinInfo.getRoomnum();
+		int paymeth = checkinInfo.getPaymeth();
+		double deposit = checkinInfo.getDeposit();
+		String arrivingdt = checkinInfo.getArrivingdt();
+		String departuredt = checkinInfo.getDeparturedt();
+		String memberid = checkinInfo.getMemberid();
+		int breakfast = checkinInfo.getBreakfast();
+		String remarks = checkinInfo.getRemarks();
+
+		CheckinRecord checkinRecord = new CheckinRecord();
+		if (id != 0) {
+			checkinRecord.setId(id);
+		}
+		checkinRecord.setCheckinnum(checkinnum);
+		checkinRecord.setRoomnum(roomnum);
+		checkinRecord.setPaymeth(paymeth);
+		checkinRecord.setDeposit(deposit);
+		checkinRecord.setArrivingdt(arrivingdt);
+		checkinRecord.setDeparturedt(departuredt);
+		checkinRecord.setMemberid(memberid);
+		checkinRecord.setBreakfast(breakfast);
+		checkinRecord.setStaffid(staffid);
+		checkinRecord.setRemarks(remarks);
+
+		return checkinRecord;
+	}
+
+	private RoomType getRoomType(String roomnum) {
+		Room room = roomDao.findByRoomnum(roomnum);
+		if (room != null) {
+			int typeid = room.getTypeid();
+			RoomType roomType = roomTypeDao.findById(typeid);
+			return roomType;
+		}
+
+		return null;
+	}
+
+	private String getStaffName(String staffid) {
+		Staff staff = staffDao.findByStaffId(staffid);
+		String staffname = staff.getStaffname();
+
+		return staffname;
+	}
+
+	private double getMprice(RoomType roomType, String memberid) {
+		double mprice = 0;
+
+		if (memberid.equals("")) {
+			return mprice;
+		}
+
+		Member member = memberDao.findBymemberid(memberid);
+		int rank = member.getRank();
+		if (rank == 0) {
+			mprice = roomType.getRmprice();
+		}
+		if (rank == 1) {
+			mprice = roomType.getVmprice();
+		}
+
+		return mprice;
+	}
+
+	public CheckinRecordDao getCheckinRecordDao() {
+		return checkinRecordDao;
+	}
+
+	public void setCheckinRecordDao(CheckinRecordDao checkinRecordDao) {
+		this.checkinRecordDao = checkinRecordDao;
+	}
+
+	public ReservationRecordDao getReservationRecordDao() {
+		return reservationRecordDao;
+	}
+
+	public void setReservationRecordDao(
+			ReservationRecordDao reservationRecordDao) {
+		this.reservationRecordDao = reservationRecordDao;
+	}
+
+	public RoomDao getRoomDao() {
+		return roomDao;
+	}
+
+	public void setRoomDao(RoomDao roomDao) {
+		this.roomDao = roomDao;
+	}
+
+	public GuestDao getGuestDao() {
+		return guestDao;
+	}
+
+	public void setGuestDao(GuestDao guestDao) {
+		this.guestDao = guestDao;
+	}
+
+	public LogFileDao getLogFileDao() {
+		return logFileDao;
+	}
+
+	public void setLogFileDao(LogFileDao logFileDao) {
+		this.logFileDao = logFileDao;
+	}
+
+	public StaffDao getStaffDao() {
+		return staffDao;
+	}
+
+	public void setStaffDao(StaffDao staffDao) {
+		this.staffDao = staffDao;
+	}
+
+	public RoomTypeDao getRoomTypeDao() {
+		return roomTypeDao;
+	}
+
+	public void setRoomTypeDao(RoomTypeDao roomTypeDao) {
+		this.roomTypeDao = roomTypeDao;
+	}
+
+	public MemberDao getMemberDao() {
+		return memberDao;
+	}
+
+	public void setMemberDao(MemberDao memberDao) {
+		this.memberDao = memberDao;
+	}
+}

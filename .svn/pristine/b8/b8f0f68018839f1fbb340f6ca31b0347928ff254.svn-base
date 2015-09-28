@@ -1,0 +1,351 @@
+package dao.impl;
+
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+import dao.RoomTypeDao;
+import entity.Room;
+import entity.RoomType;
+
+public class RoomTypeDaoImpl implements RoomTypeDao {
+
+	public RoomTypeDaoImpl() {
+
+	}
+
+	@Override
+	public void create(RoomType roomType) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			session.save(roomType);
+			tx.commit();
+			session.close();
+			sessionFactory.close();
+			System.out.println("ok");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void modify(RoomType roomType) {
+		Configuration config = new Configuration().configure();
+		@SuppressWarnings("deprecation")
+		SessionFactory sessionFactory = config.buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+
+		RoomType type = findById(roomType.getId());
+		type.setTypename(roomType.getTypename());
+		type.setNumofadult(roomType.getNumofadult());
+		type.setNumofkid(roomType.getNumofkid());
+		type.setBedtype(roomType.getBedtype());
+		type.setStdprice(roomType.getStdprice());
+		type.setDiscprice(roomType.getDiscprice());
+		type.setRmprice(roomType.getRmprice());
+		type.setVmprice(roomType.getVmprice());
+		type.setRemarks(roomType.getRemarks());
+
+		session.update(type);
+		tx.commit();
+		session.close();
+		sessionFactory.close();
+	}
+
+	@Override
+	public void delete(RoomType roomType) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			RoomType type = findById(roomType.getId());
+			session.delete(type);
+			tx.commit();
+			session.close();
+			sessionFactory.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public RoomType findById(int id) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.id ="
+					+ id;
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<RoomType> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return (RoomType) list.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<RoomType> findByTypename(String typename) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.typename = '"
+					+ typename + "'";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<RoomType> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<RoomType> findByAdult(int num) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.numofadult >= "
+					+ num;
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<RoomType> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<RoomType> findByKid(int num) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.numofkid >= "
+					+ num;
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<RoomType> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<RoomType> findByAdultKid(int numofadult, int numofkid) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.numofadult >= "
+					+ numofadult
+					+ " and roomtype.numofkid >= "
+					+ numofkid
+					+ " order by roomtype.stdprice desc";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<RoomType> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<RoomType> findByBedType(int bedtype) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.bedtype = '"
+					+ bedtype + "'";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<RoomType> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Room> findByStdprice(double min, double max) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.stdprice between = "
+					+ min + " and " + max;
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<Room> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Room> findByDiscprice(double min, double max) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.discprice between = "
+					+ min + " and " + max;
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<Room> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Room> findByRmprice(double min, double max) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.rmprice between = "
+					+ min + " and " + max;
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<Room> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Room> findByVmprice(double min, double max) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype where roomtype.vmprice between = "
+					+ min + " and " + max;
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<Room> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<RoomType> findAll() {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.RoomType as roomtype";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<RoomType> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+}

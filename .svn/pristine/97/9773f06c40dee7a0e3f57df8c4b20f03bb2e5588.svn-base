@@ -1,0 +1,54 @@
+package action;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+import org.springframework.stereotype.Component;
+
+import service.ReportsService;
+import sheet.CheckinGuestSheet;
+
+@ParentPackage(value="json-default")
+@Results({@Result(name="success", location="/jsp/TcheckninForm.jsp")})
+@Component
+public class TcheckinForm extends BaseAction{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private CheckinGuestSheet sheet;
+	
+	@Resource
+	private ReportsService reportsService;
+
+	public CheckinGuestSheet getSheet() {
+		return sheet;
+	}
+
+	public void setSheet(CheckinGuestSheet sheet) {
+		this.sheet = sheet;
+	}
+	
+	@Action(value = "/TcheckinFormSearch")//19
+	public String searchTCheckinGuestSheet() throws Exception {
+		super.execute();
+		Date now=new Date();
+		SimpleDateFormat formater=new SimpleDateFormat("yyyy-MM-dd");		
+		String arrivingdt1=formater.format(now)+" 00:00:00";
+		String arrivingdt2=formater.format(now)+" 23:59:59";
+		List<CheckinGuestSheet> sheetlist=reportsService.getCheckinSheetByArrivingdt(arrivingdt1, arrivingdt2);
+		request.setAttribute("tcheckninguestsheet", sheetlist);		
+		
+		return "success";
+	}
+
+}

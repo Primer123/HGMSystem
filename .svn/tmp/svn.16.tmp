@@ -1,0 +1,46 @@
+package action;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.xml.ws.Action;
+
+import service.MemberService;
+import model.FloorInfo;
+import model.MemberInfo;
+
+public class FloorManageAction extends BaseAction{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	private MemberInfo member;
+
+	@Resource
+	private MemberService memberService;
+	
+
+	public MemberInfo getMember() {
+		return member;
+	}
+
+	public void setMember(MemberInfo member) {
+		this.member = member;
+	}
+
+	@Action(value = "/floorsearch")//20
+	
+	
+	
+	@Action(value= "/add")//60
+	public String createFloor() throws Exception {
+		
+	}
+	
+    @Action(value="/update")
+	@Action(value="/delete")
+}

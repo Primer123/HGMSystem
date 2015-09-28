@@ -1,0 +1,162 @@
+<%@ page contentType="text/html; charset=gb2312" language="java" import="java.sql.*" errorPage="" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>退房信息表管理</title>
+
+<link href="waiter.css" rel="stylesheet" type="text/css"/>
+<script type="text/JavaScript">
+<!--
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body onload="MM_preloadImages('image/ydxx1.jpg','image/djrz1.jpg','image/hfgl1.jpg','image/tfjz1.jpg','image/ydzrz1.jpg')">
+<!-- header -->
+<div id="header">
+	<div class="container">
+		<div class="wrapper">
+			<div class="logo">
+				<h1>&nbsp;&nbsp;</h1>
+				<h1>&nbsp;</h1>
+				<h1>&nbsp;</h1>
+				<p>&nbsp; </p>
+				<div id="headerlayer"><img src="image/header.jpg" width="813" height="164" /></div>
+		        <h1>&nbsp; </h1>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- frame -->
+
+<!-- content -->
+<div id="content">
+<div class="maincontent">
+<div class="worklist">
+<p class="roomInformation"><a href=""><span class="recordInformation"></span></a><span class="recordInformation"><a href=""><span class="checkIn"></span></a><span class="checkIn"><a href=""><span class="changeRoom"></span></a></span></span></p>
+
+<p class="recordInformation"><span class="roomInformation"><a href=""></a><a href=""><span class="checkIn"></span></a></span></p>
+<p class="recordInformation">&nbsp;</p>
+<p class="recordInformation">&nbsp;</p>
+<p class="recordInformation">&nbsp;</p>
+<p class="recordInformation">&nbsp;</p>
+<p class="recordInformation">&nbsp;</p>
+<p class="recordInformation">&nbsp;</p>
+<p class="recordInformation">&nbsp;</p>
+<div id="allroom">
+  <div id="allroomlayer">
+    <p class="roomInformation"><a href="recordRoom.html"></a><a href="image" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordInformation','','image/ydxx1.jpg',1)"></a><a href="changeRoom.html" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('changeRoom','','image/hfgl1.jpg',1)"></a><img src="image/kfyd.jpg" alt="客房预订" name="roomrecord" width="250" height="80" border="0" id="roomrecord" /><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordmanage','','image/ydxx1.jpg',0)"><img src="image/ydxx.jpg" alt="预订管理" name="recordmanage" width="250" height="80" border="0" id="recordmanage" /></a><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordCheckin','','image/ydzrz1.jpg',1)"><img src="image/ydzrz.jpg" alt="预订转入住" name="recordCheckin" width="250" height="80" border="0" id="recordCheckin" /></a><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('checinroom','','image/djrz1.jpg',1)"><img src="image/djrz.jpg" alt="登记入住" name="checinroom" width="250" height="80" border="0" id="checinroom" /></a><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('changeroom','','image/hfgl1.jpg',1)"><img src="image/hfgl.jpg" alt="换房管理" name="changeroom" width="250" height="80" border="0" id="changeroom" /></a><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('checkout','','image/tfjz1.jpg',1)"><img src="image/tfjz.jpg" alt="退房结账" name="checkout" width="250" height="80" border="0" id="checkout" /></a></p>
+  </div>
+  <table width="781" height="416" >
+    <tr >
+      <td width="180" valign="top" ><p >名称 </p></td>
+      <td width="312" valign="top" ><p >描述 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >入住单号 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >客房编号 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >房价 </p></td>
+      <td width="312" valign="top" ><p >是入住登记时的折后价 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >押金 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >住宿天数 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >住宿费 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >店内消费 </p></td>
+      <td width="312" valign="top" ><p >如果有附加消费，自动计算出 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >餐费 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >电话费 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >实际应收 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >应退押金 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >付款方式 </p></td>
+      <td width="312" valign="top" ><p >现金、支票、信用卡、代金劵、其他 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >实收 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >找零 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >操作员 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >备注 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+  </table>
+  <input type="submit"  class="printcheckout"  value="  "name="Submit" id="Submit" />
+  <input type="submit"  class="consumptionmanage" value=""  name="Submit" id="Submit"/>
+ 
+</div>
+<p class="checkIn"><span class="roomInformation"><a href=""><span class="recordInformation"></span></a><span class="recordInformation"><a href=""></a><a href=""><span class="changeRoom"></span></a><span class="changeRoom"><a href=""><span class="checkOut"></span></a></span></span></span></p>
+
+<p class="changeRoom">&nbsp;</p>
+<p class="changeRoom">&nbsp;</p>
+<p class="changeRoom">&nbsp;</p>
+<p class="changeRoom">&nbsp;</p>
+<p class="changeRoom">&nbsp;</p>
+<p class="changeRoom">&nbsp;</p>
+</div>
+</div>
+</div>
+
+
+<!-- footer -->
+</body>
+</html>

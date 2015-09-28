@@ -1,0 +1,114 @@
+<%@ page contentType="text/html; charset=gb2312" language="java" import="java.sql.*" errorPage="" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>前台登记入住管理</title>
+<%@ include file="common/CommonWaiterHead.jsp" %>
+</head>
+<body onload="MM_preloadImages('image/kfxx1.jpg','image/ydxx1.jpg','image/hfgl1.jpg','image/tfjz1.jpg','image/kfyd1.jpg','image/ydzrz1.jpg','image/djrz1.jpg')">
+<!-- header -->
+<%@ include file="common/CommonHeader.jsp" %>
+
+<!-- content -->
+<div id="content">
+<div class="maincontent">
+<div class="worklist">
+
+<div id="allroom">
+  <div id="allroomlayer">
+  <p class="roomInformation"><span class="roomInformation"><a href="WaiterRoommanage.html"></a></span><a href="WaiterRoommanage.html" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('roomInformation','','image/kfyd1.jpg',1)"></a><a href="recordRoom.html"></a><a href="image" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordInformation','','image/ydxx1.jpg',1)"></a><a href="changeRoom.html" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('changeRoom','','image/hfgl1.jpg',1)"></a><img src="image/kfyd.jpg" name="roomrecord" width="250" height="80" border="0" id="roomrecord" /><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordmanage','','image/ydxx1.jpg',0)"><img src="image/ydxx.jpg" name="recordmanage" width="250" height="80" border="0" id="recordmanage" /></a><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('recordCheckin','','image/ydzrz1.jpg',1)"><img src="image/ydzrz.jpg" name="recordCheckin" width="250" height="80" border="0" id="recordCheckin" /></a><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('checinroom','','image/djrz1.jpg',1)"><img src="image/djrz.jpg" name="checinroom" width="250" height="80" border="0" id="checinroom" /></a><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('changeroom','','image/hfgl1.jpg',1)"><img src="image/hfgl.jpg" name="changeroom" width="250" height="80" border="0" id="changeroom" /></a><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('checkout','','image/tfjz1.jpg',1)"><img src="image/tfjz.jpg" name="checkout" width="250" height="80" border="0" id="checkout" /></a></p>
+  </div>
+  <table >
+    <tr >
+      <td width="180" valign="top" ><p >名称 </p></td>
+      <td width="312" valign="top" ><p >描述 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >入住单号 </p></td>
+      <td width="312" valign="top" ><p >系统自动生成 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >客房编号 </p></td>
+      <td width="312" valign="top" ><p >根据客房编号，自动显示 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >客房类型 </p></td>
+      <td width="312" valign="top" ><p >根据客房编号，自动显示 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >标准价 </p></td>
+      <td width="312" valign="top" ><p >根据客房编号，自动显示 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >折后价 </p></td>
+      <td width="312" valign="top" ><p >根据客房编号，自动显示 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >押金 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >入住人 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >证件类别 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >证件号码 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >联系电话 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >抵店时间 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >离店时间 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >入住人数 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >操作员 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >会员编号 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >会员价格 </p></td>
+      <td width="312" valign="top" ><p >根据客房编号，自动显示 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >提供早餐 </p></td>
+      <td width="312" valign="top" ><p >复选框 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >定时叫醒 </p></td>
+      <td width="312" valign="top" ><p >复选框 </p></td>
+      </tr>
+    <tr >
+      <td width="180" valign="top" ><p >备注 </p></td>
+      <td width="312" valign="top" ><p >&nbsp;</p></td>
+      </tr>
+  </table>
+  <form id="form1" name="form1" method="post" action="">
+    <label for="Submit"></label>
+     <input type="submit"  class="printform"  value="  "name="Submit" id="Submit" />
+  </form>
+  </div>
+</div>
+</div>
+</div>
+
+<%@ include file="common/CommonJs.jsp" %>
+</body>
+</html>

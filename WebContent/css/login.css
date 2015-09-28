@@ -1,0 +1,89 @@
+@CHARSET "UTF-8";
+body{
+background-image: url(../image/bg1.jpg);
+background-repeat: no-repeat;
+background-position: 30% 10%;
+}
+
+
+
+#img {
+max-width: 100%;
+height: auto;
+}
+.waiterlogin {
+background-image: url(../image/banner3.gif);
+background-repeat: no-repeat;
+margin-left:100px;
+width:60%;
+height:500px;
+margin-top:80px;
+float:left;
+z-index:1;
+}
+
+.managerlogin {
+background-image: url(../image/banner1.gif);
+background-repeat: no-repeat;
+margin-left:100px;
+width:60%;
+height:500px;
+margin-top:80px;
+float:left;
+z-index:1;
+}
+
+.adminlogin {
+background-image: url(../image/banner2.gif);
+background-repeat: no-repeat;
+margin-left:100px;
+width:60%;
+height:500px;
+margin-top:80px;
+float:left;
+z-index:1;
+}
+
+
+#login {
+width:30%;
+height:500px;
+float:right;
+z-index:1;
+margin-top:80px;
+
+}
+
+#logintop{
+text-align:center;
+font-family:Arial, Helvetica, sans-serif;
+font-size:36px;
+line-height:80px;
+margin-top:10px;
+height:90px;
+
+}
+#logintext {
+
+font-family:Arial, Helvetica, sans-serif;
+font-size:16px;
+line-height:30px;
+text-align:center;
+height:300px;
+z-index:1;
+margin-top:10px;
+
+}
+#logintext .textstyle{
+font-family:Arial, Helvetica, sans-serif;
+font-size:16px;
+height:20px;
+}
+
+#logintext .btnstyle{
+margin:auto;
+font-size:16px;
+font-family:Arial, Helvetica, sans-serif;
+height:30px;
+background:none;
+}

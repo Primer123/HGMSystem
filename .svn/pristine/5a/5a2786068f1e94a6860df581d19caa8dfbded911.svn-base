@@ -1,0 +1,38 @@
+package service;
+
+import java.io.OutputStream;
+import java.util.List;
+
+import model.ConsumptionInfo;
+
+public interface ConsumptionService {
+	/*
+	 * 查询某客房的消费记录
+	 */
+	public List<ConsumptionInfo> searchConsumByCRNum(String checkinnum,String roomnum);
+	
+	/*
+	 * 打印消费账单
+	 */
+	public void printConsumptionBill(OutputStream os, List<ConsumptionInfo> consumptionInfos);
+	
+	/*
+	 * 计算消费总额
+	 */
+	public double calcuTotalConsumption(double discount, String checkinnum,String roomnum);
+	
+	/*
+	 * 添加新的消费记录
+	 */
+	public void addNewConsumptionItem(ConsumptionInfo consumption,String staffid);
+	
+	/*
+	 * 修改消费记录
+	 */
+	public void modifyConsumptionInfo(ConsumptionInfo consumption,String staffid);
+
+	/*
+	 * 删除消费记录
+	 */
+	public void deleteConsumption(ConsumptionInfo consumption,String staffid);
+}

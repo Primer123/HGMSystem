@@ -1,0 +1,61 @@
+package action;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.xml.ws.Action;
+
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+import org.springframework.stereotype.Component;
+
+import service.FloorService;
+import service.MemberService;
+import model.FloorInfo;
+import model.MemberInfo;
+@ParentPackage(value="json-default")
+@Results({@Result(name="success", location="/jsp/FloorManage.jsp"), 
+	 @Result(name="input", location="/jsp/FloorManage.jsp")})
+@Component
+
+public class FloorManageAction extends BaseAction{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	private FloorInfo floor;
+
+	@Resource
+	private FloorService floorService;
+	
+
+	public FloorInfo getFloor() {
+		return floor;
+	}
+
+	public void setFloor(FloorInfo floor) {
+		this.floor = floor;
+	}
+
+	 @Action(value = "/floorsearch")//20
+	
+	
+	
+	 @Action(value= "/add")//60
+	public String createFloor() throws Exception {
+		super.execute();
+	   // setFloor(request.getParameter("floorInfo"));
+		boolean floorId = floorService.addNewFloor(floor);
+	}
+
+	
+    @Action(value="/update")
+	@Action(value="/delete")
+	
+}
+

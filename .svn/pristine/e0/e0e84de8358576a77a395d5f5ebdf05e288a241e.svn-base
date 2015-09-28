@@ -1,0 +1,15 @@
+package service;
+
+import java.util.List;
+
+import entity.CommodityDisc;
+
+public interface CommodityDiscService {
+	public List<CommodityDisc> getAllCommodityDisc();
+	
+	public void modifyCommodityDisc(CommodityDisc commodityDisc);
+	
+	public void deleteCommodityDisc(CommodityDisc commodityDisc);
+	
+	public void addCommodityDisc(CommodityDisc commodityDisc);
+}

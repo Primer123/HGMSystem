@@ -1,0 +1,242 @@
+package dao.impl;
+
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+import dao.CheckoutRecordDao;
+import entity.CheckoutRecord;
+
+public class CheckoutRecordDaoImpl implements CheckoutRecordDao {
+
+	private CheckoutRecordDaoImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void create(CheckoutRecord checkoutRecord) {
+		// TODO Auto-generated method stub
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			session.save(checkoutRecord);
+			tx.commit();
+			session.close();
+			sessionFactory.close();
+			System.out.println("ok");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void modify(CheckoutRecord checkoutRecord) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			CheckoutRecord checkoutRecord_tmp = findById(checkoutRecord.getId());
+			checkoutRecord_tmp.setCheckinnum(checkoutRecord.getCheckinnum());
+			checkoutRecord_tmp.setRoomnum(checkoutRecord.getRoomnum());
+			checkoutRecord_tmp.setCheckindt(checkoutRecord.getCheckindt());
+			checkoutRecord_tmp.setCheckoutdt(checkoutRecord.getCheckoutdt());
+			checkoutRecord_tmp.setRoomrate(checkoutRecord.getRoomrate());
+			checkoutRecord_tmp.setGoodsdisc(checkoutRecord.getGoodsdisc());
+			checkoutRecord_tmp.setConsumption(checkoutRecord.getConsumption());
+			checkoutRecord_tmp.setMealrate(checkoutRecord.getMealrate());
+			checkoutRecord_tmp.setTelrate(checkoutRecord.getTelrate());
+			checkoutRecord_tmp.setAr(checkoutRecord.getAr());
+			checkoutRecord_tmp.setPaymeth(checkoutRecord.getPaymeth());
+			checkoutRecord_tmp.setActualpay(checkoutRecord.getActualpay());
+			checkoutRecord_tmp.setChanges(checkoutRecord.getChanges());
+			checkoutRecord_tmp.setStaffid(checkoutRecord.getStaffid());
+			checkoutRecord_tmp.setRemarks(checkoutRecord.getRemarks());
+			session.update(checkoutRecord_tmp);
+			tx.commit();
+			session.close();
+			sessionFactory.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void delete(CheckoutRecord checkoutRecord) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			CheckoutRecord checkoutRecord_tmp = findById(checkoutRecord.getId());
+			session.delete(checkoutRecord_tmp);
+			tx.commit();
+			session.close();
+			sessionFactory.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void delete(List<CheckoutRecord> checkoutRecords) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			int size = checkoutRecords.size();
+			if (size > 0) {
+				for (int i = 0; i < size; i++) {
+					CheckoutRecord checkoutRecords_tmp = findById(checkoutRecords
+							.get(i).getId());
+					session.delete(checkoutRecords_tmp);
+				}
+			}
+
+			tx.commit();
+			session.close();
+			sessionFactory.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public CheckoutRecord findById(int id) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.CheckoutRecord as checkout where"
+					+ " checkout.id ='" + id + "'";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<CheckoutRecord> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return (CheckoutRecord) list.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public CheckoutRecord findByCRNum(String checkinNum, String roomNum) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.CheckoutRecord as checkout where "
+					+ "checkout.checkinnum ='" + checkinNum
+					+ "' and checkout.roomnum = '" + roomNum + "'";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<CheckoutRecord> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return (CheckoutRecord) list.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<CheckoutRecord> findByCheckinNum(String checkinNum) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.CheckoutRecord as checkout where "
+					+ "checkout.checkinnum ='" + checkinNum + "'";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<CheckoutRecord> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<CheckoutRecord> findByRoomNum(String roomNum) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.CheckoutRecord as checkout where "
+					+ "checkout.roomnum ='" + roomNum + "'";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<CheckoutRecord> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<CheckoutRecord> findByCheckoutDt(String checkoutdt1,
+			String checkoutdt2) {
+		try {
+			Configuration config = new Configuration().configure();
+			@SuppressWarnings("deprecation")
+			SessionFactory sessionFactory = config.buildSessionFactory();
+			Session session = sessionFactory.openSession();
+
+			String hql = "from entity.CheckoutRecord as checkout where "
+					+ "checkout.checkoutdt >= '" + checkoutdt1
+					+ "' and checkout.checkoutdt <= '" + checkoutdt2 + "'";
+			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			List<CheckoutRecord> list = query.list();
+
+			if ((list.size()) == 0)
+				return null;
+			else
+				return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}

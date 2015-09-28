@@ -1,0 +1,40 @@
+package service.impl;
+
+import java.util.List;
+
+import service.CommodityDiscService;
+import dao.CommodityDiscDao;
+import entity.CommodityDisc;
+
+public class CommodityDiscServiceImpl implements CommodityDiscService {
+	private CommodityDiscDao commodityDiscDao;
+
+	@Override
+	public List<CommodityDisc> getAllCommodityDisc() {
+		List<CommodityDisc> commodityDiscs = commodityDiscDao.findAll();
+		return commodityDiscs;
+	}
+
+	@Override
+	public void modifyCommodityDisc(CommodityDisc commodityDisc) {
+		commodityDiscDao.modify(commodityDisc);
+	}
+
+	@Override
+	public void deleteCommodityDisc(CommodityDisc commodityDisc) {
+		commodityDiscDao.delete(commodityDisc);
+	}
+
+	@Override
+	public void addCommodityDisc(CommodityDisc commodityDisc) {
+		commodityDiscDao.create(commodityDisc);
+	}
+
+	public CommodityDiscDao getCommodityDiscDao() {
+		return commodityDiscDao;
+	}
+
+	public void setCommodityDiscDao(CommodityDiscDao commodityDiscDao) {
+		this.commodityDiscDao = commodityDiscDao;
+	}
+}

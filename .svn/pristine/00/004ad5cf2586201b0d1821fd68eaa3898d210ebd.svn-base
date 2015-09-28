@@ -1,0 +1,148 @@
+package service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import model.GoodInfo;
+import dao.GoodDao;
+import dao.GoodTypeDao;
+import entity.Good;
+import service.GoodService;
+
+public class GoodServiceImpl implements GoodService {
+	private GoodDao goodDao;
+	private GoodTypeDao goodTypeDao;
+
+	@Override
+	public List<GoodInfo> getAllGoods() {
+		List<GoodInfo> infolist=new ArrayList<GoodInfo>();
+		List<Good> entitylist=goodDao.findAll();
+		for(int i=0;i<entitylist.size();i++){
+			infolist.add(convertEntity(entitylist.get(i)));
+		}
+		return infolist;
+	}
+	
+	@Override
+	public List<GoodInfo> searchGoodByType(List<String> typecodelist) {
+		List<Good> entitylist=new ArrayList<Good>();
+		for(int i=0;i<typelist.size();i++){
+			entitylist.addAll(goodDao.findByTypecode(typelist.get(i)));
+		}
+		List<GoodInfo> infolist=new ArrayList<GoodInfo>();
+		for(int j=0;j<entitylist.size();j++){
+			infolist.add(convertEntity(entitylist.get(j)));
+		}
+		return infolist;
+	}
+	
+
+	private boolean goodExisted(String goodname) {
+		Good good=goodDao.findByGoodName(goodname);
+		if(good!=null)
+			return true;
+		else
+		    return false;
+	}
+
+	private String newGoodCode(String typename) {
+		String code=goodTypeDao.findByTypename(typename).getTypecode();
+		List<Good> allgood=goodDao.findAll();
+		int num=allgood.size();
+		num++;
+		if(num<10){
+			code+="00"+num;
+		}
+		else if(100>num&&num>=10){
+			code+="0"+num;
+		}
+		else{
+			code+=num;
+		}
+		return code;
+	}
+	
+	@Override
+	public boolean addNewGood(GoodInfo goodinfo) {
+		if(!goodExisted(goodinfo.getGoodname())){
+			Good entity=convertInfo(goodinfo);
+			entity.setGoodcode(newGoodCode(goodinfo.getGoodname()));;
+			goodDao.create(entity);	
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void modifyGoodInfo(GoodInfo goodinfo) {
+		Good entity=convertInfo(goodinfo);
+		goodDao.modify(entity);		
+	}
+	
+
+	@Override
+	public void modifyGoodsType(List<GoodInfo> goodlist, String typecode) {
+		List<Good> entitylist=new ArrayList<Good>();
+		for(int i=0;i<goodlist.size();i++){
+			entitylist.add(convertInfo(goodlist.get(i)));
+		}
+		for(int j=0;j<entitylist.size();j++){
+			entitylist.get(j).setTypecode(typecode);
+		}
+		goodDao.modify(entitylist);
+	}
+	
+	@Override
+	public void deleteGood(GoodInfo goodinfo) {
+		Good entity=convertInfo(goodinfo);
+		goodDao.delete(entity);		
+	}
+	
+	@Override
+	public void deleteGoods(List<GoodInfo> goodlist) {
+		List<Good> entitylist=new ArrayList<Good>();
+		for(int i=0;i<goodlist.size();i++){
+			entitylist.add(convertInfo(goodlist.get(i)));
+		}
+		goodDao.delete(entitylist);
+	}
+	
+	private GoodInfo convertEntity(Good entity){
+		GoodInfo info=new GoodInfo();
+		info.setId(entity.getId());
+		info.setGoodcode(entity.getGoodcode());
+		info.setGoodname(entity.getGoodname());
+		String typename=goodTypeDao.findByTypecode(entity.getTypecode()).getTypename();
+		info.setTypename(typename);
+		info.setUnitprice(entity.getUnitprice());
+		info.setUnitSymbol(entity.getUnitSymbol());
+		info.setRemarks(entity.getRemarks());
+		return info;
+	}
+	
+	private Good convertInfo(GoodInfo info){
+		Good entity=new Good();
+		entity.setId(info.getId());
+		entity.setGoodcode(info.getGoodcode());
+		entity.setGoodname(info.getGoodname());
+		String typecode=goodTypeDao.findByTypename(info.getTypename()).getTypecode();
+		entity.setTypecode(typecode);
+		entity.setUnitprice(info.getUnitprice());
+		entity.setUnitSymbol(info.getUnitSymbol());
+		entity.setRemarks(info.getRemarks());
+		return entity;
+	}
+	
+	public GoodDao getGoodDao() {
+		return goodDao;
+	}
+	public void setGoodDao(GoodDao goodDao) {
+		this.goodDao = goodDao;
+	}
+	public GoodTypeDao getGoodTypeDao() {
+		return goodTypeDao;
+	}
+	public void setGoodTypeDao(GoodTypeDao goodTypeDao) {
+		this.goodTypeDao = goodTypeDao;
+	}
+}
